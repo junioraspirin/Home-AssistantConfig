@@ -1,0 +1,193 @@
+#### scripts/notifications.yaml #########################################
+
+### HA Companion App notifications ###
+## Companion notification if at home
+notify_home_companion:
+  mode: queued
+  sequence:
+    - service: script.notify_pl_home_companion
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        tag: "{{ tag }}"
+    - service: script.notify_rc_home_companion
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        tag: "{{ tag }}"
+
+## Companion notification to all even if away
+notify_companion:
+  mode: queued
+  sequence:
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        data:
+          tag: "{{ tag }}"
+    - service: notify.mobile_app_moto_g_8_power
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        data:
+          tag: "{{ tag }}"
+
+## Companion notification if home only
+notify_pl_home_companion:
+  mode: queued
+  sequence:
+    - condition: state
+      entity_id: person.paul
+      state: 'home'
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        data:
+          tag: "{{ tag }}"
+
+notify_rc_home_companion:
+  mode: queued
+  sequence:
+    - condition: state
+      entity_id: person.rachel
+      state: 'home'
+    - service: notify.mobile_app_moto_g_8_power
+      data_template:
+        title: "{{ title }}" 
+        message: "{{ message }}" 
+        data:
+          tag: "{{ tag }}"
+
+### Autoremote notifications ###
+### These are used to integrate with Tasker on android phones - mainly used for media notifications.
+## Autoremote send command only if at home
+notify_home:
+  mode: queued
+  sequence:
+    - service: script.notify_pl_home
+      data_template:
+        message: "{{ message }}"
+    - service: script.notify_rcs_home
+      data_template:
+        message: "{{ message }}"   
+
+## Autoremote send command to all even if away
+data_to_all:
+  mode: queued
+  sequence:
+    - service: rest_command.autoremote_notification
+      data_template:
+        key: !secret autoremote_pl_key
+        message: "{{ message }}" 
+    - service: rest_command.autoremote_notification
+      data_template:
+        key: !secret autoremote_rc_key
+        message: "{{ message }}" 
+
+## Autoremote messages if home only
+notify_pl_home:
+  mode: queued
+  sequence:
+    - condition: state
+      entity_id: person.paul
+      state: 'home'
+    # - service: rest_command.autoremote_msg_pl
+    #   data_template:
+    #     message: "{{ message }}"
+    # - service: rest_command.autoremote_msg_chromebookpl
+    #   data_template:
+    #     message: "{{ message }}"
+    - service: rest_command.autoremote_notification
+      data_template:
+        key: !secret autoremote_pl_key
+        message: "{{ message }}" 
+
+notify_rcs_home:
+  mode: queued
+  sequence:
+    - condition: state
+      entity_id: person.rachel
+      state: 'home'
+    # - service: rest_command.autoremote_msg_rcs
+    #   data_template:
+    #     message: "{{ message }}"    
+    - service: rest_command.autoremote_notification
+      data_template:
+        key: !secret autoremote_rc_key
+        message: "{{ message }}" 
+
+## High - Admin (major Hassio issue)
+notify_high_admin:
+  mode: queued
+  sequence:      
+    # - service: rest_command.autoremote_msg_pl
+    #   data_template:
+    #     message: 'AAPPHASS=:=hasshigh{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }}'
+    - service: rest_command.autoremote_notification
+      data_template:
+        key: !secret autoremote_pl_key
+        message: 'AAPPHASS=:=hasshigh{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }}'
+
+## High All (delays)
+# notify_high:
+#   mode: queued
+#   sequence:   
+#     - service: rest_command.autoremote_msg_pl
+#       data_template:
+#         message: 'AAPPHASS=:=hasshigh{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }} at {{ now().strftime("%H:%M %Y-%m-%d") }}'
+#     - service: rest_command.autoremote_msg_rcs
+#       data_template:
+#         message: 'AAPPHASS=:=hasshigh{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }} at {{ now().strftime("%H:%M %Y-%m-%d") }}'
+    # - service: script.notify_broadcast
+      # data_template:
+        # message: 'Alert: {{ message }}'
+        
+## Normal Admin (hassio reboot...)
+# notify_normal_admin:
+#   mode: queued
+#   sequence:      
+#     - service: rest_command.autoremote_msg_pl
+#       data_template:
+#         message: 'AAPPHASS=:=hassnorm{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }}'
+
+## Normal - all (washing / bins etc - add to notification stack for issue on arrival / delay/remind in x minutes)
+# notify_normal:
+#   sequence:
+#     - condition: state
+#       entity_id: group.people
+#       state: 'home'        
+#     - service: script.notify_pl_home
+#       data_template:
+#         message: 'AAPPHASS=:=hassnorm{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }} at {{ now().strftime("%H:%M %Y-%m-%d") }}'
+#     - service: script.notify_rcs_home
+#       data_template:
+#         message: 'AAPPHASS=:=hassnorm{{ now().strftime("%H%M%S") }}=:=Home Notification=:={{ message }} at {{ now().strftime("%H:%M %Y-%m-%d") }}'
+    # - service: script.notify_broadcast
+      # data_template:
+        # message: '{{ message }}'
+
+## Low - (weekly digest? battery info / stats)
+
+##ha companion notifaction at home
+# notify_ha_all_home:
+#   sequence:
+#     - condition: state
+#       entity_id: group.people
+#       state: 'home'  
+#     - service: notify.mobile_app_moto_g5_plus_xt1684
+#       data_template:
+#         title: '{{ title }}'
+#         message: '{{ message }}'
+#         data:
+#           tag: '{{ tag }}'
+#           icon_url: '{{ icon }}'
+#     - service: notify.mobile_app_moto_g_8_power
+#       data_template:    
+#       title: '{{ title }}'
+#       message: '{{ message }}'
+#       data:
+#         tag: '{{ tag }}'
+#         icon_url: '{{ icon }}'
+

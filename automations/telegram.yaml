@@ -1,0 +1,101 @@
+- alias: 'Telegram bot that reply pong to ping'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/ping'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: 'pong'
+        
+- alias: 'Telegram bot comds'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/start'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: "Command List
+        
+        /start
+        
+        /reload
+        
+        /reboot
+        
+        /weather
+        
+        /zigbee
+        
+        /ping
+        
+        /speak ..."
+        
+- alias: 'Telegram Status'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/weather'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: "The weather at home is currently {{states.sensor.dark_sky_daily_summary.state}}"    
+
+
+- alias: 'Telegram Speak'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/speak'
+  action:
+    - service: tts.google_translate_say 
+      entity_id: media_player.bedroom
+      data_template:
+        message: >
+          Message from {{ trigger.event.data["from_first"] }}. {% for state in trigger.event.data["args"] %} {{ state }} {% endfor %}
+          
+- alias: 'Telegram Reload'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/reload'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: 'Reloading groups and automations'
+    - service: automation.reload
+    - service: group.reload
+
+- alias: 'Telegram Zigbee On'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/zigbee'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: 'Zigbee pairing enabled'
+    - service: switch.turn_on
+      entity_id: switch.zigbee2mqtt_main_join
+
+- alias: 'Telegram Reboot'
+  trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/reboot'
+  action:
+    - service: notify.telegrambot
+      data:
+        message: 'Home Assitiant Restarting'
+    - service: homeassistant.restart 
+        
+        
+        

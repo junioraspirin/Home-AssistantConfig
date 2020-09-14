@@ -1,0 +1,104 @@
+#### automations/media_livingroom.yaml #########################################
+
+- alias: "TV on on cast"
+  trigger:
+    - platform: state
+      entity_id: media_player.tv
+      from: 'off'
+      to: 'playing'
+    - platform: state
+      entity_id: media_player.tv
+      from: 'off'
+      to: 'idle'
+    - platform: state
+      entity_id: media_player.tv
+      from: 'off'
+      to: 'paused'
+    - platform: state
+      entity_id: media_player.tv
+      from: 'paused'
+      to: 'playing'
+    - platform: state
+      entity_id: media_player.tv
+      from: 'idle'
+      to: 'playing'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.sonoff_2, switch.sonoff_3      
+
+- alias: "TV volumes on Media Playing"
+  trigger:
+    - platform: state
+      entity_id: media_player.tv
+      # from: 'off'
+      to: 'playing'
+    # - platform: state
+    #   entity_id: media_player.tv
+    #   from: 'idle'
+    #   to: 'playing'
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') | float - 0.05 }}"
+    - delay: '00:00:01'        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') }}"  
+    - delay: '00:00:01'
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') | float - 0.05 }}"
+    - delay: '00:00:01'        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') }}"  
+    - delay: '00:00:01'
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') | float - 0.05 }}"
+    - delay: '00:00:01'        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv
+        volume_level: "{{ states('input_number.vol_tv') }}"  
+
+- alias: "TV Volume Store"
+  trigger:
+    - platform: state
+      entity_id: sensor.media_tvvol
+  action:
+    - delay: '00:00:30'      
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.vol_tv
+        value: "{{ states('sensor.media_tvvol') }}"
+
+- alias: "TV off on Media Idle"
+  trigger:
+    - platform: state
+      entity_id: media_player.tv
+      to: 'idle'
+      for:
+        minutes: 2
+    - platform: state
+      entity_id: media_player.tv
+      to: 'off'
+      for:
+        minutes: 2
+    - platform: state
+      entity_id: media_player.tv
+      to: 'paused'
+      for:
+        minutes: 15
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff_2, switch.sonoff_3
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_tv
+        value: 0.75 

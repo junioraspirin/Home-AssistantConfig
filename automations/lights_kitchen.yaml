@@ -1,0 +1,71 @@
+#### automations/lights_kitchen.yaml #########################################
+  
+- alias: 'kitchen Ceiling Lights On Movement'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d00027a1fb7_occupancy
+      to: 'on'
+    - platform: numeric_state
+      entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+      below: 400 
+      for:
+        seconds: 30
+    # kitchen door opened (TODO Adjust conditions?)
+    - platform: state
+      entity_id: binary_sensor.0x00158d0004834bb3_contact
+      to: 'on'        
+  condition:
+    condition: and
+    conditions:
+      # - condition: sun
+      #   after: sunset
+      #   after_offset: '-01:30:00'
+      # - condition: sun
+      #   before: sunrise
+      #   before_offset: '02:30:00'
+      # - condition: numeric_state
+      #   entity_id: 'sensor.dark_sky_cloud_coverage'
+      #   above: '15'
+      - condition: state
+        entity_id: binary_sensor.0x00158d00027a1fb7_occupancy
+        state: 'on'      
+      - condition: numeric_state
+        entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+        below: 400 
+  action:
+    - service: switch.turn_on
+      entity_id: switch.0x00158d00022b4476_switch
+
+- alias: 'kitchen Cupboard Lights On Movement'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d00027a1fb7_occupancy
+      to: 'on'
+    # kitchen door opened.
+    - platform: state
+      entity_id: binary_sensor.0x00158d0004834bb3_contact
+      to: 'on'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.sonoff_8
+    #- service: light.turn_on
+    #  entity_id: light.kitchen_cupboards
+    
+- alias: 'Kitchen Lights Off timer'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d00027a1fb7_occupancy
+      to: 'off'
+      for:
+        minutes: 3
+    # - platform: numeric_state
+    #   entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+    #   above: '400'  
+    #   for:
+    #     minutes: 5      
+  action:
+    #- service: light.turn_off
+    #  entity_id: light.kitchen_cupboards  
+    - service: switch.turn_off
+      entity_id: switch.0x00158d00022b4476_switch, switch.sonoff_8
+ 

@@ -1,0 +1,33 @@
+#### automations/appliance_kettle.yaml #########################################
+
+- alias: 'Kettle On Morning'
+  trigger:
+    platform: time
+    at: '06:40:00'
+  condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: switch.turn_on
+      entity_id:  switch.kettle
+
+- alias: 'Kettle off evening'
+  trigger:
+    platform: time
+    at: '21:15:00'
+  condition:
+    - condition: time
+      weekday:
+        - sun
+        - mon
+        - tue
+        - wed
+        - thu
+  action:
+    - service: switch.turn_off
+      entity_id:  switch.kettle   

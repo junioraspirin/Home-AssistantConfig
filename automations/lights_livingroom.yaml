@@ -1,0 +1,126 @@
+#### automations/lights_livingroom.yaml #########################################
+  
+- alias: 'Livingroom Light On Movement'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.0x00158d0001a8fae9_occupancy
+    to: 'on'
+  condition:
+    condition: or
+    conditions:
+      - condition: sun
+        after: sunset
+        after_offset: '-02:30:00'
+      - condition: sun
+        before: sunrise
+        before_offset: '00:30:00'
+      - condition: numeric_state
+        entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+        below: 300
+  action:
+    - service: switch.turn_on
+      entity_id: switch.sonoff
+      
+- alias: 'Livingroom Lights Off timer'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.0x00158d0001a8fae9_occupancy
+    to: 'off'
+    for:
+      minutes: 10
+  condition:
+    - condition: template 
+      value_template: "{{ not is_state('media_player.tv', 'playing') }}"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff   
+
+# - alias: 'Xmas Tree Weekdays On Time AM'
+#   trigger:
+#     platform: time
+#     at: '06:40:00'
+#   condition:
+#   - condition: time
+#      weekday:
+#       - mon
+#       - tue
+#       - wed
+#       - thu
+#       - fri
+#   action:   
+#     - service: switch.turn_on
+#       entity_id: switch.xmas_tree
+
+# - alias: 'Xmas Tree Weekdays On Time PM'
+#   trigger:
+#     platform: time
+#     at: '16:00:00'
+#   condition:
+#   - condition: time
+#      weekday:
+#       - mon
+#       - tue
+#       - wed
+#       - thu
+#       - fri
+#   action:   
+#     - service: switch.turn_on
+#       entity_id: switch.xmas_tree
+
+# - alias: 'Xmas Tree Week Off Time AM'
+#   trigger:
+#     platform: time
+#     at: '07:50:00'
+#   condition:
+#   - condition: time
+#      weekday:
+#       - mon
+#       - tue
+#       - wed
+#       - thu
+#       - fri
+#   action:   
+#     - service: switch.turn_off
+#       entity_id: switch.xmas_tree
+
+# - alias: 'Xmas Tree Week Off Time PM'
+#   trigger:
+#     platform: time
+#     at: '22:00:00'
+#   condition:
+#   - condition: time
+#      weekday:
+#       - sun
+#       - mon
+#       - tue
+#       - wed
+#       - thu
+#   action:   
+#     - service: switch.turn_off
+#       entity_id: switch.xmas_tree
+
+# - alias: 'Xmas Tree Weekends On Time'
+#   trigger:
+#     platform: time
+#     at: '08:30:00'
+#   condition:
+#     - condition: time
+#       weekday:
+#         - sat
+#         - sun
+#   action:   
+#     - service: switch.turn_on
+#       entity_id: switch.xmas_tree
+
+# - alias: 'Xmas Tree Weekends Off Time'
+#   trigger:
+#     platform: time
+#     at: '23:00:00'
+#   condition:
+#   - condition: time
+#      weekday:
+#       - fri
+#       - sat
+#   action:   
+#     - service: switch.turn_off
+#       entity_id: switch.xmas_tree

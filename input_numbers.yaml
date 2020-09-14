@@ -1,0 +1,33 @@
+### inputnumbers.yaml
+
+vol_bedroom:
+  name: Volume Bedroom
+  min: 0
+  max: 1
+  initial: 0.12
+  icon: mdi:volume-high
+  step: 0.01
+
+vol_diningroom:
+  name: Volume Dining Room
+  min: 0
+  max: 1
+  initial: 0.20
+  icon: mdi:volume-high
+  step: 0.01
+
+vol_tv:
+  name: Volume TV
+  min: 0
+  max: 1
+  initial: 0.75
+  icon: mdi:volume-high
+  step: 0.01
+
+vol_mini:
+  name: Volume Mini
+  min: 0
+  max: 1
+  initial: 0.30 
+  icon: mdi:volume-high
+  step: 0.01

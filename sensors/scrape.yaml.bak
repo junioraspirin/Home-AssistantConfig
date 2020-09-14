@@ -1,0 +1,40 @@
+# ### sensors/scrape.yaml ########################################
+# - platform: scrape
+#   name: 6music title
+# #  resource: https://www.bbc.co.uk/music/tracks/find/6music
+# #  select: ".music-track__title"
+#   resource: https://www.bbc.co.uk/6music
+#   select: ".on-air__track-now-playing__title"
+#   #scan_interval: 30
+
+# - platform: scrape
+#   name: 6music artist
+# #  resource: https://www.bbc.co.uk/music/tracks/find/6music
+# #  select: ".music-track__artist"
+#   resource: https://www.bbc.co.uk/6music
+#   select: ".on-air__track-now-playing__artist"
+#   #scan_interval: 30  
+  
+# # - platform: scrape
+#   # name: Bins
+#   # resource: https://online.birmingham.gov.uk/CwsWeb/flow/requestcollectionschedules?execution=e1s6
+#   # method: GET
+#   # scan_interval: 172800
+  
+  
+# #  div class="on-air__track-now-playing__title">Johannesburg (feat. Gruff Rhys, Sibot, Radio 123 &amp; Morena Leraba)</div>
+# #                <div class="on-air__track-now-playing__artist">Africa Express</div>
+# #            </div>
+
+- platform: multiscrape
+  name: 6music scraper
+  resource: https://www.bbc.co.uk/sounds/play/live:bbc_6music
+  verify_ssl: false
+  scan_interval: 30
+  selectors:
+    version:
+      name: current_artist
+      select: '.sc-c-track__artist'
+    releasedate:
+      name: current_track
+      select: '.sc-c-track__title'

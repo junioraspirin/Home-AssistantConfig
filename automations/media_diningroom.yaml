@@ -1,0 +1,342 @@
+#### automations/media_diningroom.yaml #########################################
+
+- alias: 'Diningroom Radio On motion trigger'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001daf479_occupancy
+      to: 'on'
+  condition:
+    - condition: time
+      after: '06:30:00'
+    - condition: time
+      before: '11:30:00'
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.stereo_diningroom_trigger
+    
+- alias: 'Diningroom Radio On trigger'
+  trigger:
+    - platform: state
+      entity_id: input_boolean.stereo_diningroom_trigger
+      to: 'on'
+  action:
+    # - service: input_select.select_next
+    #   entity_id: input_select.radio_playlist
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.radio_playlist
+        option: "{{ ['Radio 6', 'Radio NTS1', 'Radio NTS2'] | random }}"   
+    - service: input_select.select_next
+      entity_id: input_select.spotify_playlist
+    - service: script.turn_on
+      data_template:
+        entity_id: >
+          {{ ['script.spotify_playlist', 'script.radio_station'] | random }}
+    # - service: script.radio_station
+
+- alias: 'Diningroom Radio trigger reset'
+  trigger:
+    platform: time
+    at: '01:00:00'
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.stereo_diningroom_trigger
+
+- alias: 'Diningroom Radio reset radio default'
+  trigger:
+    platform: state
+    entity_id: media_player.dining_room
+    to: 'off'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.radio_playlist
+        option: "Radio 6"
+
+# - alias: 'Diningroom Radio Weekdays Off Time'
+#   trigger:
+#     platform: time
+#     at: '08:25:00'
+#   action:
+#     service: media_player.turn_off
+#     data:
+#       entity_id: media_player.dining_room
+
+- alias: "Diningroom Stereo On Media playing"
+  trigger:
+    - platform: state
+      entity_id: media_player.dining_room
+      to: 'playing'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.diningroom_stereo
+    # - service: media_player.volume_set
+    #   data_template:
+    #     entity_id: media_player.dining_room
+    #     volume_level: "{{ states('input_number.vol_diningroom') }}"
+
+
+- alias: "Diningroom Stereo Off Media Idle"
+  trigger:
+    - platform: state
+      entity_id: media_player.dining_room
+      to: 'idle'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: media_player.dining_room
+      to: 'off'
+      for:
+        minutes: 2
+    - platform: state
+      entity_id: media_player.dining_room
+      to: 'paused'
+      for:
+        minutes: 15
+  action:
+    - service: switch.turn_off
+      entity_id: switch.diningroom_stereo
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "{{ states('input_number.vol_diningroom') }}"
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.dining_room
+
+# to keep spotify chromecastbridge working!
+# - alias: "Diningroom Stereo no Idle"
+#   trigger:
+#     - platform: state
+#       entity_id: media_player.dining_room
+#       to: 'idle'
+#       for:
+#         minutes: 60
+#   action:
+#     - service: media_player.turn_on
+#       data:
+#         entity_id: media_player.dining_room
+
+
+- alias: "Diningroom Stereo Off on News"
+  trigger:
+    - platform: time_pattern
+      minutes: 30
+  condition:
+    - condition: template
+      value_template: "{{ is_state('sensor.sixmusicartistpy', states('sensor.media_dining_room_artist')) }}"
+  action:
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.dining_room
+        volume_level: 0.08
+    # - service: tts.google_translate_say
+    #   entity_id: media_player.mini
+    #   data_template:
+    #     message: > 
+    #       This is todays news. Everything is fine. blah blah blah blah. blah blah blah blah. blah blah blah blah. blah blah blah blah. blah blah blah blah. blah blah blah blah.
+    #       The weather today will be {{ states('sensor.dark_sky_summary_0d') }} and currently feels like {{ states('sensor.dark_sky_apparent_temperature') }}
+    #       with a low of {{ states('sensor.dark_sky_overnight_low_temperature_0d') }} and a high of {{ states('sensor.dark_sky_daytime_high_temperature_0d') }}
+
+- alias: "Diningroom Stereo On on news finish"
+  trigger:
+    - platform: time_pattern
+      minutes: 33
+  condition:
+    - condition: template
+      value_template: "{{ is_state('sensor.sixmusicartistpy', states('sensor.media_dining_room_artist')) }}"
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "{{ states('input_number.vol_diningroom') }}"
+
+- alias: "Diningroom Volume Store"
+  trigger:
+    - platform: state
+      entity_id: sensor.media_dining_roomvol
+  action:
+    - delay: '00:05:00'      # Hack, as this has to be greater than the news intelude. otherwise the low volume gets set!
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.vol_diningroom
+        value: "{{ states('sensor.media_dining_roomvol') }}"
+
+- alias: 'Volumes Dining Room Quiet'
+  trigger:
+    platform: time
+    at: '23:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_diningroom
+        value: 0.25
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "{{ states('input_number.vol_diningroom') }}"
+
+- alias: 'Volumes Dining Room Day'
+# TODO set transition from any volume!
+  trigger:
+    platform: time
+    at: '10:00:00'
+  action:    
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: 0.27
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: 0.30
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: 0.34        
+    - delay:
+        seconds: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: 0.40
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_diningroom
+        value: 0.40 
+
+
+#remote
+- alias: 'rfbridge_demultiplexer'
+  trigger:
+    - platform: mqtt
+      topic: tele/RFBridge/RESULT
+  action:
+    - service: python_script.rfbridge_demux
+      data_template:
+        payload: '{{trigger.payload_json.RfReceived.Data}}'
+
+
+- alias: "Diningroom Stereo Remote Power"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_pause
+      to: 'on'
+  action:
+    - service: media_player.media_play_pause
+      data:
+        entity_id: media_player.dining_room
+
+- alias: "Diningroom Stereo Remote 100%"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_vol_100
+      to: 'on'
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "1.0"
+        
+- alias: "Diningroom Stereo Remote 50%"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_vol_50
+      to: 'on'
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "0.4"
+
+- alias: "Diningroom Stereo Remote 25%"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_vol_25
+      to: 'on'
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room
+        volume_level: "0.2"
+
+- alias: "Diningroom Stereo Remote Light"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_light
+      to: 'on'
+  action:
+    # - service: ifttt.trigger
+    #   data_template: {"event":"add_to_playlist", "value1":"{{ states('sensor.media_dining_room_track') }}", "value2":"{{ states('sensor.media_dining_room_artist') }}"}
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        title: 'Track Added to Playlist A'
+        message: >
+          {{ states('sensor.media_dining_room_track') }} - {{ states('sensor.media_dining_room_artist') }}
+
+- alias: "Diningroom Stereo Remote Brightm"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_brightm
+      to: 'on'
+  action:
+    - service: spotcast.start
+      data:
+        device_name: 'Dining Room'
+        uri: spotify:playlist:2hABaZvv5cLDJ9TNI2ebz7
+        random_song: true
+
+- alias: "Diningroom Stereo Remote Brightp"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_brightp
+      to: 'on'
+  action:
+    - service: spotcast.start
+      data:
+        device_name: 'Dining Room'
+        uri: spotify:playlist:0Dztc4pJ7a6jt5Lgy8hJLB
+        random_song: true
+
+- alias: "Diningroom Stereo Remote Speedp"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_speedp
+      to: 'on'
+  action:
+    - service: media_player.media_next_track
+      entity_id: media_player.dining_room
+
+- alias: "Diningroom Stereo Remote Speedm"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_speedm
+      to: 'on'
+  action:
+    - service: media_player.media_previous_track
+      entity_id: media_player.dining_room
+
+- alias: "Diningroom Stereo Remote Modep"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_modep
+      to: 'on'
+  action:
+    - service: input_select.select_next
+      entity_id: input_select.spotify_playlist
+    - service: script.spotify_playlist
+
+
+- alias: "Diningroom Stereo Remote Modem"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.dining_room_modem
+      to: 'on'
+  action:
+    - service: input_select.select_next
+      entity_id: input_select.radio_playlist
+    - service: script.radio_station

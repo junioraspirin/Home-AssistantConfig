@@ -1,0 +1,53 @@
+#### automations/system.yaml #########################################
+
+# Boot Update MQTT and Backup
+- alias: "HASS start-up"
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "sonoffs/cmnd/state"
+        payload: "" 
+    - service: mqtt.publish
+      data:
+        topic: "hass/status"
+        payload: "online"         
+    - delay: '00:01:00'     
+    - service: hassio.snapshot_full
+      data_template:
+        name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+    - service: google_assistant.request_sync
+
+- alias: "Update sensor Every minute"
+  trigger:
+    platform: time_pattern
+    minutes: '/1'
+  action:
+    - service: homeassistant.update_entity
+      entity_id: sensor.distance_apart
+
+        
+- alias: Snapshot weekly
+  trigger:
+    platform: time
+    at: '02:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - mon
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+
+- alias: Backup GDrive Time
+  trigger:
+    platform: time
+    at: '03:00:00'
+  action:
+    service: rest_command.google_backup
+
+
+

@@ -1,0 +1,505 @@
+#### automations/lights_bedroomfront.yaml #########################################
+
+- alias: 'Bedroom Fairy Light On Movement'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_frontbedroom
+      to: 'on'
+#  condition:
+  action:
+    service: switch.turn_on
+    entity_id: switch.bedroom_fairy
+    
+
+- alias: 'Bedroom Night Lamps On Movement if dark'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_frontbedroom
+      to: 'on'
+    - platform: numeric_state
+      entity_id: sensor.bedroom_front_motion_pl_illuminance
+      below: 8    
+    - platform: numeric_state
+      entity_id: sensor.bedroom_front_motion_rc_illuminance
+      below: 20
+  condition:
+    condition: and
+    conditions:
+    - condition: or
+      conditions:
+      - condition: numeric_state
+        entity_id: sensor.bedroom_front_motion_pl_illuminance
+        below: 8
+      - condition: numeric_state
+        entity_id: sensor.bedroom_front_motion_rc_illuminance
+        below: 20
+    - condition: state
+      entity_id: group.presence_motion_frontbedroom
+      state: 'on'      
+    # - condition: time
+    #   weekday:
+    #   - mon
+    #   - tue
+    #   - wed
+    #   - thu
+    #   - fri
+    # - condition: time
+    #   after: '07:20:00'
+    # - condition: time
+    #   before: '21:30:00'
+    # - condition: state
+    #   entity_id: input_boolean.lights_bedroom_trigger
+    #   state: 'on'
+  action:
+    service: switch.turn_on
+    entity_id: switch.bedroom_night_light
+    #entity_id: switch.bedroompl, switch.sonoff_7 
+
+# - alias: 'Bedroom Lamps On Movement PL if dark week'
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.bedroom_front_motion_pl_occupancy
+#       to: 'on'
+#     - platform: numeric_state
+#       entity_id: sensor.bedroom_front_motion_pl_illuminance
+#       below: 10  
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: numeric_state
+#       entity_id: sensor.bedroom_front_motion_pl_illuminance
+#       below: 10
+#     - condition: state
+#       entity_id: binary_sensor.bedroom_front_motion_pl_occupancy
+#       state: 'on' 
+#     - condition: time
+#       weekday:
+#       - mon
+#       - tue
+#       - wed
+#       - thu
+#       - fri
+#     - condition: time
+#       after: '07:20:00'
+#     - condition: time
+#       before: '21:30:00'
+#     - condition: state
+#       entity_id: input_boolean.lights_bedroom_trigger
+#       state: 'on'
+#   action:
+#     service: switch.turn_on
+#     entity_id: switch.bedroompl, switch.sonoff_7 
+
+# - alias: 'Bedroom Lamps On Movement RC if dark weekend'
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.bedroom_front_motion_rc_occupancy
+#       to: 'on'
+#     - platform: numeric_state
+#       entity_id: sensor.bedroom_front_motion_rc_illuminance
+#       below: 30  
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: numeric_state
+#       entity_id: sensor.bedroom_front_motion_rc_illuminance
+#       below: 30
+#     - condition: state
+#       entity_id: binary_sensor.bedroom_front_motion_rc_occupancy
+#       state: 'on'        
+#     - condition: time
+#       weekday:
+#       - sat
+#       - sun
+#     - condition: time
+#       after: '09:00:00'
+#     - condition: time
+#       before: '21:30:00'
+#     - condition: state
+#       entity_id: input_boolean.lights_bedroom_trigger
+#       state: 'on'
+#   action:
+#     service: switch.turn_on
+#     entity_id: switch.bedroompl, switch.sonoff_7 
+
+# - alias: 'Bedroom Lamps On Movement PL if dark weekend'
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.bedroom_front_motion_pl_occupancy
+#       to: 'on'
+#     - platform: numeric_state
+#       entity_id: sensor.bedroom_front_motion_pl_illuminance
+  #     below: 10    
+  # condition:
+  #   condition: and
+  #   conditions:
+  #   - condition: numeric_state
+  #     entity_id: sensor.bedroom_front_motion_pl_illuminance
+  #     below: 10
+  #   - condition: state
+  #     entity_id: binary_sensor.bedroom_front_motion_pl_occupancy
+  #     state: 'on'        
+  #   - condition: time
+  #     weekday:
+  #     - sat
+  #     - sun
+  #   - condition: time
+  #     after: '09:00:00'
+  #   - condition: time
+  #     before: '21:30:00'
+  #   - condition: state
+  #     entity_id: input_boolean.lights_bedroom_trigger
+  #     state: 'on'
+  # action:
+  #   service: switch.turn_on
+  #   entity_id: switch.bedroompl, switch.sonoff_7 
+
+
+- alias: 'Bedroom Lamps On Master Switch'
+  trigger:
+    - platform: state
+      entity_id: switch.0x00158d00025eace3_switch
+      to: 'on'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.bedroompl, switch.sonoff_7 
+    - service: input_boolean.turn_on      
+      entity_id: input_boolean.lights_bedroom_trigger 
+
+# - alias: 'Bedroom Lamps On Movement AM we'
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.0x00158d0001ad43b9_occupancy
+#       to: 'on'
+#     - platform: state
+#       entity_id: switch.0x00158d00025eace3_switch
+#       to: 'on'
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: time
+#       weekday:
+#       - sat
+#       - sun
+#     - condition: time
+#       after: '09:00:00'
+#     - condition: sun
+#       before: sunrise
+#       before_offset: '00:30:00' 
+#     - condition: state
+#       entity_id: input_boolean.lights_bedroom_trigger
+#       state: 'on'
+#   action:
+#     service: switch.turn_on
+#     entity_id: switch.sonoff_7, switch.bedroompl 
+
+# - alias: 'Bedroom Lamps On Movement PM'
+#   trigger:
+#     platform: state
+#     entity_id: binary_sensor.0x00158d0001ad43b9_occupancy
+#     to: 'on'
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: sun
+#       after: sunset
+#       after_offset: '-02:30:00'
+#     - condition: time
+  #     before: '22:00:00'
+  #   - condition: state
+  #     entity_id: input_boolean.lights_bedroom_trigger
+  #     state: 'on' 
+  # action:
+  #   service: switch.turn_on
+  #   entity_id: switch.sonoff_7, switch.bedroompl 
+
+- alias: 'Bedroom Fairy Off Timer'
+  trigger:
+    platform: state
+    # entity_id: binary_sensor.0x00158d0001ad43b9_occupancy
+    entity_id: group.presence_motion_frontbedroom
+    to: 'off'
+    for:
+      minutes: 10
+  #condition:
+    #condition: and
+    #conditions:
+    #- condition: sun
+    #  before: sunset
+    #  before_offset: "-02:00:00"
+    #- condition: sun
+    #  after: sunrise
+    #  after_offset: "+02:00:00"    
+    #- condition: time
+    #  before: '21:00:00'
+    #- condition: time
+    #  after: '08:00:00'  
+  action:
+    service: switch.turn_off
+    entity_id: switch.bedroom_fairy
+
+# - alias: 'Bedroom Fairy Off Timer Night'
+#   trigger:
+#     platform: state
+#     # entity_id: binary_sensor.0x00158d0001ad43b9_occupancy
+#     entity_id: group.presence_motion_frontbedroom
+#     to: 'off'
+#     for:
+#       minutes: 2
+#   condition:
+#     condition: or
+#     conditions:
+#     - condition: time
+#       after: '21:00:00'
+#     - condition: time
+#       before: '07:00:00'
+#   action:
+#     service: switch.turn_off
+#     entity_id: switch.bedroom_fairy
+
+- alias: 'Bedroom Lights Off timer'
+  trigger:
+    platform: state
+    entity_id: group.presence_motion_frontbedroom
+    to: 'off'
+    for:
+      minutes: 25
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0x00158d00025eace3_switch, switch.sonoff_7, switch.bedroompl, switch.bedroom_night_light
+
+- alias: 'Bedroom RCS Button Single'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002b2fc26_click
+    to: 'single'
+  action:
+    - service: switch.toggle
+      entity_id: switch.sonoff_7
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger      
+  
+- alias: 'Bedroom RCS Button Double'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002b2fc26_click
+    to: 'double'
+  action:
+    - service: switch.toggle
+      entity_id: switch.bedroom_rclamp2 
+
+- alias: 'Bedroom RCS Button Long'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002b2fc26_click
+    to: 'long'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff_7, switch.bedroom_rclamp2, switch.backbedroombabymon, switch.backbedroomshelflamp
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger
+
+- alias: 'Bedroom RCS Button Long 2'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002b2fc26_click
+    to: 'long'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: switch.sonoff_7
+      state: 'off'
+    - condition: state
+      entity_id: switch.bedroom_rclamp2
+      state: 'off'
+    - condition: state
+      entity_id: switch.backbedroombabymon
+      state: 'off'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bedroompl, switch.bedroom_fairy
+    - service: light.turn_off      
+      entity_id: light.hall_up_lights
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger
+
+- alias: 'Bedroom PL Button Single'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c720c3_click
+    to: 'single'
+  action:
+    - service: switch.toggle
+      entity_id: switch.bedroompl     
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger
+      
+- alias: 'Bedroom pl Button Long'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c720c3_click
+    to: 'long'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bedroompl, switch.backbedroombabymon, switch.backbedroomshelflamp    
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger
+      
+- alias: 'Bedroom pl Button Long 2'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c720c3_click
+    to: 'long'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: switch.bedroompl
+      state: 'off'
+    - condition: state
+      entity_id: switch.backbedroombabymon
+      state: 'off'      
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff_7, switch.bedroom_rclamp2, switch.bedroom_fairy
+    - service: light.turn_off      
+      entity_id: light.hall_up_lights
+    - service: input_boolean.turn_off      
+      entity_id: input_boolean.lights_bedroom_trigger
+
+
+
+# - alias: 'Bedroom Light Weekdays On Time'
+#   trigger:
+#     platform: time
+#     at: '06:29:55'
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: time
+#       weekday:
+#         - mon
+#         - tue
+#         - wed
+#         - thu
+#         - fri
+#     - condition: state
+#       entity_id: group.presence_people
+#       state: 'home'
+#   action:   
+#     - service: switch.turn_on
+#       entity_id: switch.bedroom_fairy
+#     - service: input_boolean.turn_on    
+#       entity_id: input_boolean.lights_bedroom_trigger    
+
+# - alias: 'Bedroom Light Weekends On Time'
+#   trigger:
+#     platform: time
+#     at: '08:30:00'
+#   condition:
+#     condition: and
+#     conditions:
+#     - condition: time
+#       weekday:
+#         - sat
+#         - sun
+#     - condition: state
+#       entity_id: group.presence_people
+#       state: 'home'
+#   action:   
+#     # - service: switch.turn_on
+    # #   entity_id: switch.bedroom_fairy
+    # - service: input_boolean.turn_on    
+    #   entity_id: input_boolean.lights_bedroom_trigger    
+
+
+- alias: 'Bedroom RClamp2 Off time'
+  trigger:
+    platform: state
+    entity_id: switch.bedroom_rclamp2
+    to: 'on'
+    for:
+      hours: 1
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bedroom_rclamp2
+
+- alias: 'Bedroom Shelf lamp Off time'
+  trigger:
+    platform: state
+    entity_id: switch.backbedroomshelflamp
+    to: 'on'
+    for:
+      minutes: 15
+  action:
+    - service: switch.turn_off
+      entity_id: switch.backbedroomshelflamp
+
+- alias: 'Bedroom Lamps trigger reset am'
+  trigger:
+    platform: time
+    at: '06:40:00'
+  action:
+    - service: input_boolean.turn_on    
+      entity_id: input_boolean.lights_bedroom_trigger
+
+- alias: 'Bedroom Lamps trigger reset pm'
+  trigger:
+    platform: time
+    at: '12:00:00'
+  action:
+    - service: input_boolean.turn_on    
+      entity_id: input_boolean.lights_bedroom_trigger
+
+# Floor button
+- alias: 'Bedroom Floor Button Single'
+  trigger: 
+    platform: state
+    entity_id: sensor.bedroom_floor_button_click
+    to: 'single'
+  action:
+    - service: switch.toggle
+      entity_id: switch.backbedroomshelflamp #switch.sonoff_7     
+
+- alias: 'Bedroom Floor Button Double'
+  trigger: 
+    platform: state
+    entity_id: sensor.bedroom_floor_button_click
+    to: 'double'
+  action:
+    - service: switch.toggle
+      entity_id: switch.backbedroombabymon     
+
+- alias: 'Bedroom Floor Button Long'
+  trigger: 
+    platform: state
+    entity_id: sensor.bedroom_floor_button_click
+    to: 'long'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bedroompl, switch.sonoff_7, switch.bedroom_rclamp2, switch.backbedroomshelflamp   
+
+- alias: 'Baby Monitor On Time'
+  trigger:
+    platform: time
+    at: '18:30:00'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.backbedroombabymon    
+
+- alias: 'Baby Monitor Off Time'
+  trigger:
+    platform: time
+    at: '01:00:00'
+  condition:
+    - condition: state
+      entity_id: group.presence_motion_down
+      state: 'off'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.backbedroombabymon   
+
+
+
+

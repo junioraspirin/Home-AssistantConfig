@@ -1,0 +1,60 @@
+#### automations/media_volumes.yaml #########################################
+
+# TODO migrate these to room specific
+
+- alias: 'Volumes Morning'
+  trigger:
+    platform: time
+    at: '06:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_mini
+        value: 0.40
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.mini
+        volume_level: "{{ states('input_number.vol_mini') }}"
+        
+- alias: 'Volumes Day'
+  trigger:
+    platform: time
+    at: '10:00:00'
+  action:   
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.mini
+        volume_level: "{{ states('input_number.vol_mini') }}"
+        
+- alias: 'Volumes Night Downstairs week'
+  trigger:
+    platform: time
+    at: '23:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sun
+        - mon
+        - tue
+        - wed
+        - thu
+  action:   
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.mini
+        volume_level: "{{ states('input_number.vol_mini') }}"
+
+- alias: 'Volumes Night Downstairs weekend'
+  trigger:
+    platform: time
+    at: '01:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - fri
+        - sat
+  action:   
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.mini
+        volume_level: "{{ states('input_number.vol_mini') }}"

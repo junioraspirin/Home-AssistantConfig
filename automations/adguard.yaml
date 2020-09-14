@@ -1,0 +1,23 @@
+#### automations/adguard.yaml #########################################
+
+# turnbackon
+- alias: 'Adguard on Timer'
+  trigger:
+    platform: state
+    entity_id: switch.adguard_protection_2
+    to: 'off'
+    for:
+      minutes: 30
+  action:
+    - service: switch.turn_on
+      entity_id: switch.adguard_protection_2
+
+      
+- alias: 'Adguard off Webhook'      
+  trigger:
+    platform: webhook
+    webhook_id: disable-adguard
+  action:
+    - service: switch.turn_off
+      entity_id: switch.adguard_protection_2
+

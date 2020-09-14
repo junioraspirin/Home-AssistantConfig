@@ -1,0 +1,6 @@
+##### logger.yaml ####
+
+default: fatal
+#logs:
+#  rflink: debug
+#  homeassistant.components.rflink: debug

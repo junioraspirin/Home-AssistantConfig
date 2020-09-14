@@ -1,0 +1,156 @@
+#### automations/lights_diningroom.yaml #########################################
+
+- alias: 'Diningroom Lights On Movement'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_diningroom
+      to: 'on'
+    # - platform: state  
+    #   entity_id: binary_sensor.0x00158d0001dc126e_occupancy
+    #   to: 'on'
+    # - platform: state
+    #   entity_id: binary_sensor.0x00158d0001daf479_occupancy
+    #   to: 'on'
+    # - platform: state
+    #   entity_id: binary_sensor.0x00158d00028aaf7c_occupancy
+    #   to: 'on'
+    # - platform: numeric_state
+    #   entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+    #   below: '350'
+    #   for:
+    #     minutes: 5
+  action:
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.dining_{{ states('input_select.diningroom_lights_mode') }}
+    
+- alias: 'Diningroom Lights Off Timer'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_diningroom
+      to: 'off'
+      for:
+        minutes: 15
+    # - platform: state
+    #   entity_id: binary_sensor.0x00158d0001dc126e_occupancy
+    #   to: 'off'
+    #   for:
+    #     minutes: 15
+  action:
+    - service: switch.turn_off
+      entity_id: switch.diningroomlamp, switch.sonoff_4, switch.sonoff_5      
+    - service: light.turn_off
+#      entity_id: light.0x90fd9ffffe149e19_light, light.0xd0cf5efffeda13f0_light, light.0xd0cf5efffe7d4154_light 
+      entity_id: light.diningroom_lights, light.wled_diningroom_fire
+
+
+# - alias: 'Birdlamp off on Cupboard open'
+  # trigger:
+    # platform: state
+    # entity_id: binary_sensor.0x00158d000200d63a_contact
+    # to: 'on'
+  # action:
+    # - service: switch.turn_off
+      # entity_id: switch.diningroomlamp
+
+- alias: 'Diningroom Ceiling Lights Button Single'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c8c5a4_click
+    to: 'single' 
+  #   platform: mqtt 
+  #   topic: 'zigbee2mqtt/0x00158d0002c8c5a4' 
+  # condition: 
+  #   condition: template 
+  #   value_template: '{{ "single" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_next
+      entity_id: input_select.diningroom_lights_mode
+    - service: script.turn_on 
+      data_template:
+        entity_id: >
+          {% if is_state('input_select.diningroom_lights_mode' , 'Normal') %} 
+            script.dining_Normal_instant
+          {% else %} 
+            script.dining_{{ states('input_select.diningroom_lights_mode') }}
+          {% endif %}
+
+        
+- alias: 'Diningroom Ceiling Lights Button Double'
+  trigger: 
+      platform: state
+      entity_id: sensor.0x00158d0002c8c5a4_click
+      to: 'double'  
+#     platform: mqtt 
+#     topic: 'zigbee2mqtt/0x00158d0002c8c5a4' 
+#   condition: 
+#     condition: template 
+#     value_template: '{{ "double" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.diningroom_lights_mode
+        option: 'Bright'        
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.dining_{{ states('input_select.diningroom_lights_mode') }}
+
+- alias: 'Diningroom Ceiling Lights Button Triple'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c8c5a4_click
+    to: 'triple'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.diningroom_lights_mode
+        option: 'Cosy'        
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.dining_{{ states('input_select.diningroom_lights_mode') }}
+
+
+- alias: 'Diningroom Ceiling Lights Button Quadruple'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c8c5a4_click
+    to: 'quadruple' 
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.diningroom_lights_mode
+        option: 'Off'        
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.dining_{{ states('input_select.diningroom_lights_mode') }}
+
+
+- alias: 'Diningroom Ceiling Lights Button Long'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d0002c8c5a4_click
+    to: 'long'   
+  #   platform: mqtt 
+  #   topic: 'zigbee2mqtt/0x00158d0002c8c5a4' 
+  # condition: 
+  #   condition: template 
+  #   value_template: '{{ "long" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.diningroom_lights_mode
+        option: 'Normal'        
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.dining_{{ states('input_select.diningroom_lights_mode') }}
+
+- alias: 'Dining room ceiling lights reset time'
+  trigger:
+    platform: time
+    at: '06:00:00'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.diningroom_lights_mode
+        option: 'Normal'        
+  

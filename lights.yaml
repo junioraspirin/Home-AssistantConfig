@@ -1,0 +1,24 @@
+##### lights.yaml ####
+
+- platform: mqtt
+  schema: json
+  name: diningroom_lights
+  command_topic: "zigbee2mqtt/diningroom_lights/set"
+  state_topic: "zigbee2mqtt/diningroom_lights"
+  brightness: true
+
+- platform: mqtt
+  schema: json
+  name: diningroom_noncore_lights
+  command_topic: "zigbee2mqtt/diningroom_noncore_lights/set"
+  state_topic: "zigbee2mqtt/diningroom_noncore_lights"
+  brightness: true
+
+- platform: mqtt
+  schema: json
+  name: hall_up_lights
+  command_topic: "zigbee2mqtt/hall_up_lights/set"
+  state_topic: "zigbee2mqtt/hall_up_lights"
+  brightness: true
+  
+  

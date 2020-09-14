@@ -1,0 +1,67 @@
+radio_station:
+  alias: Play selected radio station
+  sequence:
+    - service: media_player.play_media
+      data_template:
+        entity_id: media_player.dining_room
+        media_content_id: >
+          {% if is_state("input_select.radio_playlist", "Radio 6") %} http://bbcmedia.ic.llnwd.net/stream/bbcmedia_6music_mf_p
+          {% elif is_state("input_select.radio_playlist", "Radio NTS1") %} http://stream-relay-geo.ntslive.net/stream
+          {% elif is_state("input_select.radio_playlist", "Radio NTS2") %} http://stream-relay-geo.ntslive.net/stream2
+          {% elif is_state("input_select.radio_playlist", "Radio 1") %} http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1_mf_p
+          {% elif is_state("input_select.radio_playlist", "Radio 2") %} http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p
+          {% endif %}
+        media_content_type: 'music'
+
+
+spotify_playlist:
+  alias: Play selected spotify playlist
+  sequence:
+    - service: spotcast.start
+      data_template:
+        device_name: 'Dining Room Speakers'
+        random_song: true
+        shuffle: true
+        uri: >
+          {% if is_state("input_select.spotify_playlist", "Daily Mix 1") %} spotify:playlist:37i9dQZF1E36Z8mApw2Ixi
+          {% elif is_state("input_select.spotify_playlist", "Daily Mix 2") %} spotify:playlist:37i9dQZF1E37Jx0u8J9SPv
+          {% elif is_state("input_select.spotify_playlist", "Daily Mix 3") %} spotify:playlist:37i9dQZF1E389pXCvtAXuC
+          {% elif is_state("input_select.spotify_playlist", "Daily Mix 4") %} spotify:playlist:37i9dQZF1E35aoGzoFysQF
+          {% elif is_state("input_select.spotify_playlist", "Daily Mix 5") %} spotify:playlist:37i9dQZF1E37zFYZ79jRId
+          {% elif is_state("input_select.spotify_playlist", "Daily Mix 6") %} spotify:playlist:37i9dQZF1E35o3VkndZx2j
+          {% elif is_state("input_select.spotify_playlist", "Discover") %} spotify:playlist:37i9dQZEVXcWJUZeqMjMuI
+          {% elif is_state("input_select.spotify_playlist", "New Releases") %} spotify:playlist:37i9dQZEVXbnTwdp4CRhCD
+          {% elif is_state("input_select.spotify_playlist", "Headphone Commute 2019") %} spotify:playlist:679ktsNlnGpHKsHCVriCEy
+          {% elif is_state("input_select.spotify_playlist", "Headphone Commute") %} spotify:playlist:7vzSTNsO9lFnXyz8K0apM8
+          {% elif is_state("input_select.spotify_playlist", "Four Tet") %} spotify:playlist:2uzbATYxs9V8YQi5lf89WG
+          {% endif %}
+
+####lms and cc bridge
+    # - service: media_player.select_source
+    #   data:
+    #     entity_id: media_player.spotify_junior_aspirin
+    #     source: "Dining Room"
+    # - service: media_player.play_media
+    #   data_template:
+    #     entity_id: media_player.spotify_junior_aspirin
+    #     media_content_type: playlist
+    #     media_content_id: >
+    #       {% if is_state("input_select.spotify_playlist", "Daily Mix 1") %} spotify:playlist:37i9dQZF1E36Z8mApw2Ixi
+    #       {% elif is_state("input_select.spotify_playlist", "Daily Mix 2") %} spotify:playlist:37i9dQZF1E37Jx0u8J9SPv
+    #       {% elif is_state("input_select.spotify_playlist", "Daily Mix 3") %} spotify:playlist:37i9dQZF1E389pXCvtAXuC
+    #       {% elif is_state("input_select.spotify_playlist", "Daily Mix 4") %} spotify:playlist:37i9dQZF1E35aoGzoFysQF
+    #       {% elif is_state("input_select.spotify_playlist", "Daily Mix 5") %} spotify:playlist:37i9dQZF1E37zFYZ79jRId
+    #       {% elif is_state("input_select.spotify_playlist", "Daily Mix 6") %} spotify:playlist:37i9dQZF1E35o3VkndZx2j
+    #       {% elif is_state("input_select.spotify_playlist", "Discover") %} spotify:playlist:37i9dQZEVXcWJUZeqMjMuI
+    #       {% elif is_state("input_select.spotify_playlist", "New Releases") %} spotify:playlist:37i9dQZEVXbnTwdp4CRhCD
+    #       {% elif is_state("input_select.spotify_playlist", "Headphone Commute 2019") %} spotify:playlist:679ktsNlnGpHKsHCVriCEy
+    #       {% elif is_state("input_select.spotify_playlist", "Headphone Commute") %} spotify:playlist:7vzSTNsO9lFnXyz8K0apM8
+    #       {% elif is_state("input_select.spotify_playlist", "Four Tet") %} spotify:playlist:2uzbATYxs9V8YQi5lf89WG
+    #       {% endif %}        
+    # - service: media_player.shuffle_set
+    #   data:
+    #     entity_id: media_player.spotify_junior_aspirin
+    #     shuffle: true
+    # - service: media_player.media_next_track
+    #   data:
+    #     entity_id: media_player.spotify_junior_aspirin

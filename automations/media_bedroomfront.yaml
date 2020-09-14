@@ -1,0 +1,175 @@
+#### automations/media_bedroomfront.yaml #########################################
+
+- alias: 'Bedroom Radio Weekend On Time'
+  trigger:
+    platform: time
+    at: '07:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sat
+        - sun
+  action:   
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.0
+    - service: media_player.play_media
+      data:
+        entity_id: media_player.bedroom
+        media_content_id: http://bbcmedia.ic.llnwd.net/stream/bbcmedia_6music_mf_p
+        # media_content_id: http://192.168.0.12:8123/local/Bird-song.mp3
+        media_content_type: 'audio/mp3'
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.02
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.04
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.06        
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.08        
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.10    
+    - delay:
+        minutes: 1        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.12    
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.14
+    - delay:
+        minutes: 1
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: "{{ states('input_number.vol_bedroom') }}"
+
+- alias: "Bedroom Stereo Vol Reset Media Idle"
+  trigger:
+    - platform: state
+      entity_id: media_player.bedroom
+      to: 'idle'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: media_player.bedroom
+      to: 'off'
+      for:
+        minutes: 2
+    - platform: state
+      entity_id: media_player.bedroom
+      to: 'paused'
+      for:
+        minutes: 30
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: "{{ states('input_number.vol_bedroom') }}"
+    - service: media_player.turn_off
+      data:
+        entity_id: media_player.bedroom
+        
+- alias: "Bedroom Stereo Stop Timer"
+  trigger:
+    - platform: state
+      entity_id: media_player.bedroom
+      to: 'playing'
+      for:
+        minutes: 180
+  action:
+    service: media_player.turn_off
+    data:
+      entity_id: media_player.bedroom
+
+- alias: 'Bedroom Volumes Morning'
+  trigger:
+    platform: time
+    at: '06:00:00'
+  action:   
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_bedroom
+        value: 0.15
+
+- alias: 'Bedroom Volumes Day'
+  trigger:
+    platform: time
+    at: '10:00:00'
+  action:   
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_bedroom
+        value: 0.40
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.17
+    - delay:
+        seconds: 10       
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.20
+    - delay:
+        seconds: 10        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.24        
+    - delay:
+        seconds: 10        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.29       
+    - delay:
+        seconds: 10        
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: 0.35   
+    - delay:
+        seconds: 10
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: "{{ states('input_number.vol_bedroom') }}"
+
+- alias: ' Bedroom Volumes Night'
+  trigger:
+    platform: time
+    at: '21:00:00'
+  action:
+    - service: input_number.set_value
+      data:
+        entity_id: input_number.vol_bedroom
+        value: 0.14   
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: "{{ states('input_number.vol_bedroom') }}"
+

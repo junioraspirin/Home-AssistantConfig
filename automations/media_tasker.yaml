@@ -1,0 +1,124 @@
+#### automations/media_tasker.yaml #########################################
+
+- alias: "Tasker Bedroom Back Stereo"
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: sensor.media_bedroom_back_track
+    # - platform: state
+    #   entity_id: sensor.media_bedroom_back_artist     
+    - platform: state
+      entity_id: sensor.media_bedroombackvol
+    - platform: state
+      entity_id: media_player.back_bedroom
+    - platform: state
+      entity_id: person.paul, person.rachel
+  action:   
+    # - delay:
+    #     # seconds: 3
+    #     milliseconds: 500
+    - service: script.notify_home
+      data_template:
+        message: >
+          AAPPCASTIN=:=back_bedroom=:=
+          {{- states('sensor.media_bedroom_back_track') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.back_bedroom', 'volume_level') }}=:=
+          {{- states('sensor.media_bedroom_back_artist') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.back_bedroom', 'app_name') }}=:=
+          {{- states('media_player.back_bedroom') }}=:=
+          {{- state_attr('media_player.back_bedroom', 'media_album_name') }}=:=
+          {{- state_attr('media_player.spotify_junior_aspirin', 'media_playlist') }}
+    # - delay:
+    #     seconds: 2      
+      
+- alias: "Tasker Bedroom Stereo"
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: sensor.media_bedroom_track
+    # - platform: state
+    #   entity_id: sensor.media_bedroom_artist     
+    - platform: state
+      entity_id: sensor.media_bedroomvol
+    - platform: state
+      entity_id: media_player.bedroom
+    - platform: state
+      entity_id: person.paul, person.rachel
+  action:   
+    # - delay:
+    #     # seconds: 1
+    #     milliseconds: 500
+    - service: script.notify_home
+      data_template:
+        message: >
+          AAPPCASTIN=:=bedroom=:=
+          {{- states('sensor.media_bedroom_track') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.bedroom', 'volume_level') }}=:=
+          {{- states('sensor.media_bedroom_artist') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.bedroom', 'app_name') }}=:=
+          {{- states('media_player.bedroom') }}=:=
+          {{- state_attr('media_player.bedroom', 'media_album_name') }}=:=
+          {{- state_attr('media_player.spotify_junior_aspirin', 'media_playlist') }}
+    # - delay:
+    #     seconds: 2    
+
+- alias: "Tasker Dining Room Stereo"
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: sensor.media_dining_room_track
+    # - platform: state
+    #   entity_id: sensor.media_dining_room_artist     
+    - platform: state
+      entity_id: sensor.media_dining_roomvol
+    - platform: state
+      entity_id: media_player.dining_room    
+    - platform: state
+      entity_id: person.paul, person.rachel
+  action:   
+    # - delay:
+    #     milliseconds: 500
+    - service: script.notify_home
+      data_template:
+        message: >
+          AAPPCASTIN=:=dining_room=:=
+          {{- states('sensor.media_dining_room_track') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.dining_room', 'volume_level') }}=:=
+          {{- states('sensor.media_dining_room_artist') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.dining_room', 'app_name') }}=:=
+          {{- states('media_player.dining_room') }}=:=
+          {{- state_attr('media_player.dining_room', 'media_album_name') }}=:=
+          {{- state_attr('media_player.spotify_junior_aspirin', 'media_playlist') }}
+    # - delay:
+    #     seconds: 2
+
+- alias: "Tasker TV Media"
+  mode: queued
+  trigger:
+    - platform: state
+      entity_id: sensor.media_tv_track
+    # - platform: state
+    #   entity_id: sensor.media_tv_artist     
+    - platform: state
+      entity_id: sensor.media_tvvol
+    - platform: state
+      entity_id: media_player.tv    
+    - platform: state
+      entity_id: person.paul, person.rachel
+  action:   
+    # - delay:
+    #     # seconds: 2
+    #     milliseconds: 500
+    - service: script.notify_home
+      data_template:
+        message: >
+          AAPPCASTIN=:=tv=:=
+          {{- states('sensor.media_tv_track') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.tv', 'volume_level') }}=:=
+          {{- states('sensor.media_tv_artist') | replace('+','plus')| replace('#','hash') | replace('&','and') }}=:=
+          {{- state_attr('media_player.tv', 'app_name') }}=:=
+          {{- states('media_player.tv') }}=:=
+          {{- state_attr('media_player.tv', 'media_album_name') }}=:=
+          {{- state_attr('media_player.spotify_junior_aspirin', 'media_playlist') }}
+    # - delay:
+    #     seconds: 2

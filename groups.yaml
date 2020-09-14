@@ -1,0 +1,96 @@
+#### groups.yaml ###
+
+## Devices
+presence_people:
+  entities:
+    - person.paul
+    - person.rachel    
+
+presence_motion:
+  name: Motion
+  entities:
+    - binary_sensor.0x00158d0001a8fae9_occupancy
+    - binary_sensor.0x00158d0001ad43b9_occupancy
+    - binary_sensor.0x00158d0001daf449_occupancy
+    - binary_sensor.0x00158d0001daf479_occupancy
+    - binary_sensor.0x00158d0001dc126e_occupancy
+    - binary_sensor.0x00158d00027a1fb7_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+
+presence_motion_down:
+  name: Motion Down
+  entities:
+    - binary_sensor.0x00158d00027a4168_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+    - binary_sensor.0x00158d0001a8fae9_occupancy
+    - binary_sensor.0x00158d0001dc126e_occupancy   
+    - binary_sensor.0x00158d00027a4168_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+    - binary_sensor.0x00158d00027a1fb7_occupancy
+    - binary_sensor.0x00158d0001dc126e_occupancy
+    - binary_sensor.0x00158d0001daf479_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+
+
+presence_motion_hallup:
+  name: Motion Hallup
+  entities:
+    - binary_sensor.0x00158d0001daf449_occupancy
+    - binary_sensor.0x00158d0001daf479_occupancy
+    - binary_sensor.0x00158d0001ad43b9_occupancy 
+    # - binary_sensor.bedroom_front_motion_rc_occupancy
+    
+presence_motion_halldown:
+  name: Motion Halldown
+  entities:
+    - binary_sensor.0x00158d00027a4168_occupancy
+    - binary_sensor.0x00158d0002e2c145_contact
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+
+
+presence_motion_diningroom:
+  name: Motion Diningroom
+  entities:
+    - binary_sensor.0x00158d0001dc126e_occupancy
+    - binary_sensor.0x00158d0001daf479_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+
+presence_motion_frontbedroom:
+  name: Motion Front Bedroom
+  entities:  
+    - binary_sensor.bedroom_front_motion_rc_occupancy
+    - binary_sensor.bedroom_front_motion_pl_occupancy
+
+presence_motion_no_doorbell:
+  name: Doorbell not required
+  entities:
+    - binary_sensor.0x00158d00027a4168_occupancy
+    - binary_sensor.0x00158d00028aaf7c_occupancy
+    - binary_sensor.0x00158d0001a8fae9_occupancy
+    - binary_sensor.0x00158d0001dc126e_occupancy
+
+## Climate
+temperature:
+  name: Home Temperature 
+  entities:
+    - sensor.0x00158d000227b177_temperature
+    - sensor.0x00158d0002c8bace_temperature
+    - sensor.0x00158d0002c8bafb_temperature
+    - sensor.0x00158d0001c2d471_temperature
+    - sensor.0x00158d0002009be1_temperature
+    - sensor.0x00158d000209118e_temperature
+    
+humidity:
+  name: Home Humidity
+  entities:
+    - sensor.0x00158d000227b177_humidity
+    - sensor.0x00158d0002c8bace_humidity
+    - sensor.0x00158d0002c8bafb_humidity
+    - sensor.0x00158d0001c2d471_humidity
+    - sensor.0x00158d0002009be1_humidity
+    - sensor.0x00158d000209118e_humidity  
+
+## this group MUST exist even if is empty for sensor template to render    
+ignored_entities:
+  entities:
+    - binary_sensor.updater

@@ -1,0 +1,10 @@
+### scenes.yaml ####
+
+# - name: Hall_Bright
+#   entities:
+#     light.0x90fd9ffffe0f6649_light:
+#       state: true
+#       brightness: 255
+#     light.0xd0cf5efffe426737_light: 
+#       state: true
+#       brightness: 255

@@ -1,0 +1,26 @@
+#### scripts/pc_control.yaml #########################################
+
+pc_pause:
+  sequence:
+    - condition: state
+      entity_id: 'binary_sensor.pc_media_playing'
+      state: 'on'        
+    - service: mqtt.publish
+      data:
+        topic: iotlink/workgroup/lambot-pc/commands/media/playpause
+        payload: ""
+    - service: input_boolean.turn_on      
+      entity_id: input_boolean.pc_playing_prev     
+
+      
+pc_play:
+  sequence:
+    - condition: state
+      entity_id: 'input_boolean.pc_playing_prev'
+      state: 'on'        
+    - service: mqtt.publish
+      data:
+        topic: iotlink/workgroup/lambot-pc/commands/media/playpause
+        payload: ""
+    - service: input_boolean.turn_off    
+      entity_id: input_boolean.pc_playing_prev  

@@ -1,0 +1,34 @@
+#### automations/lights_halldown.yaml #########################################
+  
+- alias: 'Hall Down Lights On Movement'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_halldown
+      to: 'on'
+  condition:
+    condition: or
+    conditions:
+      - condition: sun
+        before: sunrise
+        before_offset: '+03:00:00'
+      - condition: sun
+        after: sunset
+        after_offset: '-03:00:00'
+      - condition: numeric_state
+        entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+        below: 400        
+  action:
+    - service: switch.turn_on
+      entity_id: switch.0x00158d0002ec13ce_switch
+
+- alias: 'Hall Down Lights Off timer'
+  trigger:
+    platform: state
+    entity_id: group.presence_motion_halldown
+    to: 'off'
+    for:
+      minutes: 3
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0x00158d0002ec13ce_switch
+

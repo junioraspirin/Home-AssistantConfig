@@ -1,0 +1,184 @@
+#### scripts/all.yaml #########################################
+
+
+media_vol_dining_room_plus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.dining_room', 'volume_level') > 0.9 %}
+            {{ 1.0 }}
+          {% else %} 
+            {{ state_attr('media_player.dining_room', 'volume_level') + 0.1 }}
+          {% endif %}
+media_vol_dining_room_minus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.dining_room #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.dining_room', 'volume_level') < 0.1 %}
+            {{ 0.0 }}
+          {% else %} 
+            {{ state_attr('media_player.dining_room', 'volume_level') - 0.1 }}
+          {% endif %}        
+media_vol_dining_room_playlist:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        { 
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_dining_room_track') }}",
+          "value2": "{{ states('sensor.media_dining_room_artist') }}",
+          "value3": "2020 New A"              
+        }
+media_vol_dining_room_playlistb:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_dining_room_track') }}",
+          "value2": "{{ states('sensor.media_dining_room_artist') }}",
+          "value3": "2020 New B"          
+        }
+
+media_vol_bedroom_plus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: >-
+          {% if state_attr('media_player.bedroom', 'volume_level') > 0.9 %}
+            {{ 1.0 }}
+          {% else %} 
+            {{ state_attr('media_player.bedroom', 'volume_level') + 0.1 }}
+          {% endif %}
+media_vol_bedroom_minus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.bedroom
+        volume_level: >-
+          {% if state_attr('media_player.bedroom', 'volume_level') < 0.1 %}
+            {{ 0.0 }}
+          {% else %} 
+            {{ state_attr('media_player.bedroom', 'volume_level') - 0.1 }} 
+          {% endif %}
+media_vol_bedroom_playlist:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_bedroom_track') }}",
+          "value2": "{{ states('sensor.media_bedroom_artist') }}",
+          "value3": "2020 New A"            
+        }
+media_vol_bedroom_playlistb:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_bedroom_track') }}",
+          "value2": "{{ states('sensor.media_bedroom_artist') }}",
+          "value3": "2020 New B"  
+        }
+
+
+media_vol_back_bedroom_plus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.back_bedroom #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.back_bedroom', 'volume_level') > 0.9 %}
+            {{ 1.0 }}
+          {% else %} 
+            {{ state_attr('media_player.back_bedroom', 'volume_level') + 0.1 }}
+          {% endif %}
+media_vol_back_bedroom_minus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.back_bedroom #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.back_bedroom', 'volume_level') < 0.1 %}
+            {{ 0.0 }}
+          {% else %} 
+            {{ state_attr('media_player.back_bedroom', 'volume_level') - 0.1 }} 
+          {% endif %}
+media_vol_back_bedroom_playlist:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_bedroom_back_track') }}",
+          "value2": "{{ states('sensor.media_bedroom_back_artist') }}",
+          "value3": "2020 New A"  
+        }
+media_vol_back_bedroom_playlistb:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist",
+          "value1": "{{ states('sensor.media_bedroom_back_track') }}",
+          "value2": "{{ states('sensor.media_bedroom_back_artist') }}",
+          "value3": "2020 New B"  
+        }
+
+
+media_vol_tv_plus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.tv', 'volume_level') > 0.9 %}
+            {{ 1.0 }}
+          {% else %} 
+            {{ state_attr('media_player.tv', 'volume_level') + 0.1 }} 
+          {% endif %}
+media_vol_tv_minus:
+  mode: queued
+  sequence:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.tv #dining_room
+        volume_level: >-
+          {% if state_attr('media_player.tv', 'volume_level') < 0.1 %}
+            {{ 0.0 }}
+          {% else %} 
+            {{ state_attr('media_player.tv', 'volume_level') - 0.1 }}
+          {% endif %}
+media_vol_tv_playlist:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        { 
+          "event": "add_to_playlist", 
+          "value1": "{{ states('sensor.media_tv_track') }}", 
+          "value2": "{{ states('sensor.media_tv_artist') }}", 
+          "value3": "2020 New A"  
+        }
+media_vol_tv_playlistb:
+  sequence:
+    - service: ifttt.trigger
+      data_template: 
+        {
+          "event": "add_to_playlist", 
+          "value1": "{{ states('sensor.media_tv_track') }}", 
+          "value2": "{{ states('sensor.media_tv_artist') }}",
+          "value3": "2020 New B"  
+        }

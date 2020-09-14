@@ -1,0 +1,37 @@
+#### automations/presence.yaml #########################################
+
+# to fix
+- alias: "Tasker Presence Change"
+  trigger:
+    - platform: state
+      entity_id: device_tracker.moto_g5_plus_xt1684
+    - platform: state
+      entity_id: device_tracker.moto_g_8_power
+    - platform: state
+      entity_id: automation.tasker_presence_change_distance
+  action:   
+    service: rest_command.autoremote_msg_pl
+    data_template:
+      message: >
+        "AAPPPRESENCE=:=
+        {{- states('device_tracker.moto_g5_plus_xt1684') }}=:=
+        {{- states('device_tracker.moto_g_8_power') }}=:=
+        {{- states('automation.tasker_presence_change_distance') }}=:=
+        {{- states('sensor.distance_apart') | float}}"
+
+      # to fixup 
+- alias: "Tasker Presence Change Distance"
+  initial_state: false
+  trigger:
+    - platform: state
+      entity_id: sensor.distance_apart
+  action:   
+    - service: rest_command.autoremote_msg_pl
+      data_template:
+        message: > 
+          "AAPPPRESENCE=:=
+          {{- states('device_tracker.android_d7c4c38ce99110a') }}=:=
+          {{- states('device_tracker.moto_g_8_power') }}=:=
+          {{- states('automation.tasker_presence_change_distance') }}=:=
+          {{- states('sensor.distance_apart') | float}}"
+    - delay: '00:00:30'    

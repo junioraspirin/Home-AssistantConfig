@@ -1,0 +1,62 @@
+- alias: 'Bin collection advance'
+  trigger:
+    - platform: time
+      at: '16:00:00'
+  condition:
+  - condition: time
+    weekday:
+      - wed
+  action:
+    - service: input_select.select_next
+      data:
+        entity_id: input_select.bin_collection
+
+- alias: 'Bin collection notify'
+  trigger:
+    - platform: time
+      at: '17:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - tue
+  action:
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        title: 'Take out bins'
+        message: "{{ states('input_select.bin_collection') }}"
+        #ttl: 0
+        # priority: 'high'
+        data:
+          tag: bin
+          actions:
+            - action: "bincomplete" # The key you are sending for the event
+              title: "I've Done It!" # The button title
+    - service: notify.mobile_app_moto_g_8_power
+      data_template:
+        title: 'Take out bins'
+        message: "{{ states('input_select.bin_collection') }}"
+        #ttl: 0
+        # priority: 'high'    
+        data:
+          tag: bin
+          actions:
+            - action: "bincomplete" # The key you are sending for the event
+              title: "I've Done It!" # The button title
+
+- alias: 'Bincollection dismiss'
+  trigger:
+    platform: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: bincomplete
+  action: 
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        message: clear_notification
+        data:
+          tag: bin
+    - service: notify.mobile_app_moto_g_8_power
+      data_template:
+        message: clear_notification
+        data:
+          tag: bin  

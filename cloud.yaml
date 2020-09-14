@@ -1,0 +1,11 @@
+##### cloud.yaml ####
+
+google_actions:
+  filter:
+    include_domains:
+      #- input_boolean
+      - light
+      - switch
+      - binary_sensor
+      - sensor
+      

@@ -1,0 +1,20 @@
+#### automations/appliance_pc.yaml #########################################
+
+# power on/off
+- alias: 'PC Speakers on if PC Connected'
+  trigger:
+    platform: state
+    entity_id: device_tracker.lambot_pc_wifi
+    to: 'home'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.PCSpeakers
+
+- alias: 'PC Speakers on if PC Connected'
+  trigger:
+    platform: state
+    entity_id: device_tracker.lambot_pc_wifi
+    to: 'not_home'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.PCSpeakers

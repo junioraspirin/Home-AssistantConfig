@@ -1,0 +1,26 @@
+#### scripts/senes-hallway.yaml #########################################
+          
+hall_bright:
+  sequence:
+    - service: light.turn_on
+      data:
+      #  entity_id: light.0x90fd9ffffe0f6649_light, light.0xd0cf5efffe426737_light, 
+        entity_id: light.hall_up_lights
+        brightness: 255
+
+hall_dim:
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.0x90fd9ffffe0f6649_light
+        brightness: 1
+    - service: light.turn_off
+      entity_id: light.0xd0cf5efffe426737_light
+        
+hall_normal:
+  sequence:
+    - service: light.turn_on
+      data:
+        # entity_id: light.0x90fd9ffffe0f6649_light, light.0xd0cf5efffe426737_light
+        entity_id: light.hall_up_lights
+        brightness: 125

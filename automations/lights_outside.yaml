@@ -1,0 +1,119 @@
+#### automations/lights_outside.yaml #########################################
+
+## Fairy Lights 
+- alias: 'Fairy Lights On Morning'
+  trigger:
+    platform: time
+    at: '06:40:00'
+  condition:
+    condition: sun
+    before: sunrise
+    before_offset: '+01:00:00'
+  action:
+    - service: switch.turn_on
+      entity_id:  switch.outside_fairy_lights
+      
+- alias: 'Fairy Lights Off Sunrise'
+  trigger:
+    platform: sun
+    event: sunrise
+    offset: '+01:00:00'
+  action:
+    - service: switch.turn_off
+      entity_id:  switch.outside_fairy_lights
+
+- alias: 'Fairy Lights On Sunset'
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-01:00:00'
+  action:
+    - service: switch.turn_on
+      entity_id:  switch.outside_fairy_lights
+
+- alias: 'Fairy Lights Off Evening Week'
+  trigger:
+    platform: time
+    at: '23:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sun
+        - mon
+        - tue
+        - wed
+        - thu
+  action:
+    - service: switch.turn_off
+      entity_id:  switch.outside_fairy_lights
+      
+- alias: 'Fairy Lights Off Evening Weekend'
+  trigger:
+    platform: time
+    at: '01:00:00'
+  condition:
+    - condition: time
+      weekday:
+        - sat
+        - sun
+  action:
+    - service: switch.turn_off
+      entity_id:  switch.outside_fairy_lights
+
+- alias: 'Fairy Lights On when door open and late'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0004834bb3_contact
+      to: 'on'
+  condition:
+    condition: or
+    conditions:
+      - condition: time
+        after: '23:00:00'
+      - condition: time
+        before: '06:40:00'
+  action:
+    - service: switch.turn_on
+      entity_id:  switch.outside_fairy_lights     
+
+      # fix for weekend times!
+- alias: 'Fairy Lights Off when door closed and late'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0004834bb3_contact
+      to: 'off'
+      for:
+        minutes: 15
+  condition:
+    condition: or
+    conditions:
+      #weekday conditions
+      - condition: and
+        conditions:
+        - condition: time
+          weekday:
+          - sun 
+          - mon
+          - tue
+          - wed
+          - thu
+        - condition: or
+          conditions:
+            - condition: time
+              after: '23:00:00'
+            - condition: time
+              before: '06:40:00'      
+      # weekend conditions
+      - condition: and
+        conditions:
+        - condition: time
+          weekday:
+          - fri
+          - sat        
+        - condition: time
+          after: '01:00:00'
+        - condition: time
+          before: '06:40:00'
+  action:
+  - service: switch.turn_off
+    entity_id:  switch.outside_fairy_lights 

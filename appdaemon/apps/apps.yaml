@@ -1,0 +1,9 @@
+---
+hello_world:
+  module: hello
+  class: HelloWorld
+
+
+bbc_scrape:
+  module: bbcscrape
+  class: BbcScrape

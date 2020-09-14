@@ -1,0 +1,195 @@
+#### automations/appliance_washingmachine.yaml #########################################
+
+## Door Actions
+
+# When door closed or opened turn washing machine on
+- alias: 'Washing Machine Door Open Set Idle if Off'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001b7157d_contact
+      from: 'off'
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001b7157d_contact
+      from: 'on'
+      to: 'off'      
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Idle'   
+    - service: switch.turn_on
+      entity_id: switch.washing
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data:
+        message: clear_notification
+        data:
+          tag: washing
+    - service: notify.mobile_app_moto_g_8_power
+      data:
+        message: clear_notification
+        data:
+          tag: washing
+
+## Power Automations 
+- alias: 'Washing Machine Running Power draw'
+  trigger:
+    - entity_id: sensor.washer_average_watts
+      platform: numeric_state
+      above: 20
+  # condition:
+  #   condition: or
+  #   conditions:
+  #     - condition: state
+  #       entity_id: input_select.washer_status
+  #       state: Idle
+  #     - condition: state
+  #       entity_id: input_select.washer_status
+  #       state: Clean
+  #     - condition: state
+  #       entity_id: input_select.washer_status
+  #       state: Finishing
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Running'
+    - service: ifttt.trigger
+      data_template: {"event":"gsheet", "value1":"Start", "value2":"washerevents"}
+
+# When the power drops, move the state of the washing machine to
+# Finishing.
+- alias: 'Washing Machine Finishing Power draw stopped'
+  trigger:
+    - entity_id: sensor.washer_average_watts
+      platform: numeric_state
+      below: 12
+      for:
+        minutes: 6
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.washer_status
+        state: Running
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Finishing'
+
+- alias: 'Washing Machine Set Clean after timeout'
+  trigger:
+    - platform: state
+      entity_id: input_select.washer_status
+      to: 'Finishing'
+      for:
+        minutes: 5
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: input_select.washer_status
+        state: 'Finishing'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Clean'   
+    # - service: script.notify_ha_all_home
+    #   data:
+    #     title: 'Washing Machine Says...'
+    #     message: '👖 Enjoy your clean clothes! 👕'        
+    #     tag: washing
+    #     icon: "/local/baseline_local_laundry_service_black_18dp.png"  
+    - service: script.notify_home_companion 
+      data:
+        title: 'Washing Machine Says...'
+        message: '👖 Enjoy your clean clothes! 👕'
+        tag: washing    
+    # - service: notify.mobile_app_moto_g5_plus_xt1684
+    #   data:
+    #     title: 'Washing Machine Says...'
+    #     message: '👖 Enjoy your clean clothes! 👕'
+    #     data:
+    #       tag: washing
+    # - service: notify.mobile_app_moto_g_8_power
+    #   data:
+    #     title: 'Washing Machine Says...'
+    #     message: '👖 Enjoy your clean clothes! 👕'
+    #     data:
+    #       tag: washing
+    - service: ifttt.trigger
+      data_template: {"event":"gsheet", "value1":"Finish", "value2":"washerevents"}        
+
+# Power off when idle
+- alias: 'Washing Machine Off if door closed for time'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001b7157d_contact
+      to: 'off'
+      for:
+        hours: 12
+  condition:
+    - condition: state
+      entity_id: input_select.washer_status
+      state: 'Idle'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Power Off'
+        
+- alias: 'Washing Machine Off if door open for time'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001b7157d_contact
+      to: 'on'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washer_status
+        option: 'Power Off'        
+
+    
+- alias: 'Washing Machine Off on Power Off'
+  trigger:
+    - platform: state
+      entity_id: input_select.washer_status
+      to: 'Power Off'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.washing
+      
+# ## Notify
+# - alias: 'Washing Machine Notify on Clean'
+#   trigger:
+#     - entity_id: input_select.washer_status
+#       platform: state
+#       to: 'Clean'
+#       from: 'Running'
+#       for:
+#         minutes: 1
+#     - entity_id: input_select.washer_status
+#       platform: state
+#       to: 'Clean'
+#       from: 'Finishing'
+#       for:
+#         minutes: 5
+#   action:
+#     - service: notify.mobile_app_moto_g5_plus_xt1684
+#       data:
+#         title: 'Washing Machine Says...'
+#         message: '👖 Enjoy your clean clothes! 👕'
+#         data:
+#           tag: washing
+#     - service: notify.mobile_app_moto_g_8_power
+#       data:
+#         title: 'Washing Machine Says...'
+#         message: '👖 Enjoy your clean clothes! 👕'
+#         data:
+#           tag: washing
+#     - service: ifttt.trigger
+#       data_template: {"event":"washer_event", "value1":"Finish"}

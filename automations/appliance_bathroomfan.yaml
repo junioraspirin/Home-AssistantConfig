@@ -1,0 +1,38 @@
+#### automations/appliance_bathroomfan.yaml #########################################
+
+# power on/off
+- alias: 'Bathroom Fan On High Humidity'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.bathroom_humidity_change
+    above: 5
+  action:
+    - service: switch.turn_on
+      entity_id: switch.bathroomfan
+
+- alias: 'Bathroom Fan Off Low Humidity'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.0x00158d000227b177_humidity
+    below: 85
+    for:
+      minutes: 1  
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bathroomfan      
+        
+- alias: 'Bathroom Fan Off Timer'
+  trigger:
+    platform: state
+    entity_id: switch.bathroomfan
+    from: 'off'
+    to: 'on'
+    for:
+      minutes: 10
+  condition:
+    condition: numeric_state
+    entity_id: sensor.0x00158d000227b177_humidity
+    below: 85
+  action:
+    - service: switch.turn_off
+      entity_id: switch.bathroomfan         

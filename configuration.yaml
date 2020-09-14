@@ -1,0 +1,61 @@
+homeassistant:
+  name: Home
+  latitude: !secret hass_latitude
+  longitude: !secret hass_longitude
+  elevation: !secret hass_elevation
+  unit_system: metric
+  time_zone: Europe/London
+  customize: !include customize.yaml
+
+frontend:
+config:
+conversation:
+#ffmpeg:
+history:
+logbook:
+map:
+mobile_app:
+person:
+python_script:
+ssdp:
+sun:
+system_health:
+tplink:
+updater:
+zeroconf:
+
+automation: !include_dir_merge_list automations/
+binary_sensor: !include binary_sensors.yaml
+cloud: !include cloud.yaml
+device_tracker: !include devicetrackers.yaml
+group: !include groups.yaml
+ifttt: !include ifttt.yaml
+input_boolean: !include input_booleans.yaml
+input_datetime:
+input_number: !include input_numbers.yaml
+input_select: !include input_selects.yaml
+input_text:
+light: !include lights.yaml
+logger: !include logger.yaml
+#media_player: !include media_players.yaml
+#packages: !include_dir_merge_named packages/
+notify: !include notify.yaml
+recorder: !include recorder.yaml
+rest_command: !include rest_commands.yaml
+#rflink: !include rflink.yaml
+#scene: !include scenes.yaml
+script: !include_dir_merge_named scripts/
+sensor: !include_dir_merge_list sensors/
+switch: !include switches.yaml
+telegram_bot: !include telegram.yaml
+timer: !include timers.yaml
+tts: !include tts.yaml
+#xiaomi_aqara: !include xiaomi.yaml
+
+spotcast:
+  sp_dc: !secret spotcast_sp_dc
+  sp_key: !secret spotcast_sp_key
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret

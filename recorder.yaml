@@ -1,0 +1,134 @@
+##### recorder.yaml ####
+purge_keep_days: 14
+db_url: !secret mariadb_db_url
+
+include:
+  domains:
+    - device_tracker
+    - binary_sensor
+    - light
+    - sensor
+    - switch
+    - person
+    - group
+    - media_player
+  # entities:
+    # - binary_sensor.remote_ui
+    # - sensor.0x00158d0001c2d471_humidity
+    # - sensor.0x00158d0001c2d471_temperature
+    # - sensor.0x00158d0002009be1_humidity
+    # - sensor.0x00158d0002009be1_temperature
+    # - sensor.0x00158d000209118e_humidity
+    # - sensor.0x00158d000209118e_temperature
+    # - sensor.0x00158d000227b177_humidity
+    # - sensor.0x00158d000227b177_temperature
+    # - sensor.0x00158d0002c8bace_humidity
+    # - sensor.0x00158d0002c8bace_temperature
+    # - sensor.0x00158d0002c8bafb_humidity
+    # - sensor.0x00158d0002c8bafb_temperature
+    # - sensor.dark_sky_cloud_coverage
+    # - sensor.dark_sky_humidity
+    # - sensor.dark_sky_temperature
+    # - sensor.washer_average_watts
+
+exclude:
+  entities:
+    - sensor.sixmusicartistpy
+    - sensor.sixmusictitlepy    
+    - binary_sensor.sonoff_btn
+    - binary_sensor.updater
+    - sensor.date
+    - sensor.6music_artist
+    - sensor.6music_title
+    - sensor.media_bedroom_artist 
+    - sensor.media_bedroom_track
+    - sensor.media_bedroomvol
+    - sensor.media_dining_room_artist
+    - sensor.media_dining_room_track
+    - sensor.media_dining_roomvol
+    - sensor.media_tv_artist
+    - sensor.media_tv_track
+    - sensor.media_tvvol
+    - sensor.season
+    - sensor.yr_symbol
+    - sensor.dark_sky_cloud_coverage
+    - sensor.dark_sky_daily_summary
+    - sensor.dark_sky_icon
+    - sensor.dark_sky_precip_probability
+    - sensor.dark_sky_summary
+    - sun.sun
+#     - sensor.0x00158d0001a8fae9_battery 
+#     - sensor.0x00158d0001ad43b9_battery 
+#     - sensor.0x00158d0001daf449_battery 
+#     - sensor.0x00158d0001daf479_battery 
+#     - sensor.0x00158d0001dc126e_battery 
+#     - sensor.0x00158d00027a1fb7_battery 
+#     - sensor.0x00158d00028aaf7c_battery  
+#     - sensor.0x00158d000227b177_battery 
+#     - sensor.0x00158d0002c8bace_battery 
+#     - sensor.0x00158d0002c8bafb_battery 
+#     - sensor.0x00158d0001c2d471_battery 
+#     - sensor.0x00158d0002009be1_battery 
+#     - sensor.0x00158d000209118e_battery
+#     - sensor.0x00158d000183dea8_battery
+#     - sensor.0x00158d0001b7157d_battery 
+#     - sensor.0x00158d00026b7686_battery 
+#     - sensor.0x00158d00026b76d5_battery
+#     - sensor.0x00158d0002b2fc26_battery
+#     - sensor.0x00158d0002c720c3_battery
+#     - sensor.0x00158d0002c8c5a4_battery
+#     - sensor.0x00158d000200d63a_battery
+#     - sensor.0x00158d0002e2c145_battery
+#     - sensor.0x00158d00027a4168_battery
+#     - sensor.0x00158d0001a8fae9_linkquality 
+#     - sensor.0x00158d0001ad43b9_linkquality 
+#     - sensor.0x00158d0001daf449_linkquality 
+#     - sensor.0x00158d0001daf479_linkquality 
+#     - sensor.0x00158d0001dc126e_linkquality 
+#     - sensor.0x00158d00027a1fb7_linkquality 
+#     - sensor.0x00158d00028aaf7c_linkquality  
+#     - sensor.0x00158d000227b177_linkquality 
+#     - sensor.0x00158d0002c8bace_linkquality 
+#     - sensor.0x00158d0002c8bafb_linkquality 
+#     - sensor.0x00158d0001c2d471_linkquality 
+#     - sensor.0x00158d0002009be1_linkquality 
+#     - sensor.0x00158d000209118e_linkquality
+#     - sensor.0x00158d000183dea8_linkquality
+#     - sensor.0x00158d0001b7157d_linkquality 
+#     - sensor.0x00158d00026b7686_linkquality 
+#     - sensor.0x00158d00026b76d5_linkquality
+#     - sensor.0x00158d0002b2fc26_linkquality
+#     - sensor.0x00158d0002c720c3_linkquality
+#     - sensor.0x00158d0002c8c5a4_linkquality
+#     - sensor.0x00158d000200d63a_linkquality
+#     - sensor.0x90fd9ffffe0f6649_linkquality
+#     - sensor.0xd0cf5efffe426737_linkquality
+#     - sensor.0xd0cf5efffe7d4154_linkquality
+#     - sensor.0x90fd9ffffe149e19_linkquality
+#     - sensor.0xd0cf5efffeda13f0_linkquality
+#     - sensor.0x00158d00022b4476_linkquality
+#     - sensor.0x00158d00025eace3_linkquality
+#     - sensor.0x00158d0002e2c145_linkquality
+#     - sensor.0x00158d00027a4168_linkquality
+#     - sensor.0x00158d0002ec13ce_linkquality
+#     - sensor.diningroomlamp_status
+#     - sensor.bathroomfan_status
+#     - sensor.washingmachine_status
+#     - sensor.bedroompl_status
+#     - sensor.bedroom_fairy_status
+#     - sensor.sonoff_status_3
+#     - sensor.sonoff_status_2
+#     - sensor.sonoff_status   
+#     - sensor.washer_average_watts_mean
+#     - sensor.washing_energy_current
+    - sensor.washing_energy_factor
+    - sensor.washing_energy_apparentpo
+    - sensor.washing_energy_reactivepo
+    - sensor.washing_energy_today
+    - sensor.washing_energy_total
+    - sensor.washing_energy_totalstart
+#     - sensor.washing_energy_voltage
+    - sensor.washing_energy_yesterday
+    - sensor.washing_energy_apparentpower
+    - sensor.washing_energy_reactivepower
+    - sensor.washing_energy_totalstarttime

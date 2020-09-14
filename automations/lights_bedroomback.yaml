@@ -1,0 +1,32 @@
+#### automations/lights_bedroomback.yaml #########################################
+
+- alias: 'Back Bedroom Lamp On Movement if night'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0001daf449_occupancy
+      to: 'on'
+  condition:
+    condition: and
+    conditions:
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+          before_offset: '-01:00:00'
+        - condition: sun
+          before: sunrise
+          before_offset: '+01:00:00'
+  action:
+    service: switch.turn_on
+    entity_id: switch.backbedroomlamp
+
+- alias: 'Back Bedroom Lamp Off Timer'
+  trigger:
+    platform: state
+    entity_id: binary_sensor.0x00158d0001daf449_occupancy
+    to: 'off'
+    for:
+      minutes: 10
+  action:
+    service: switch.turn_off
+    entity_id: switch.backbedroomlamp

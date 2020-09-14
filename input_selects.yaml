@@ -1,0 +1,60 @@
+### inputselects.yaml
+
+washer_status:
+  name: 'Washer Status:'
+  options:
+    - Idle
+    - Running
+    - Finishing
+    - Clean
+    - Power Off
+  initial: Idle
+  icon: mdi:washing-machine
+  
+hall_lights_mode:
+  name: 'Hall Lights Mode'
+  options:
+    - Normal
+    - Dim
+    - Bright
+  initial: Normal
+  
+diningroom_lights_mode:
+  name: 'Dining room Lights Mode'
+  options:
+    - Normal
+    - Bright
+    - Cosy
+    - 'Off'
+  initial: Normal
+
+bin_collection:
+  name: 'Bin collection'
+  options:
+    - '🗑️ Refuse Only'
+    - '♻️ Recycling & 🗑️Refuse'
+
+spotify_playlist:
+  name: 'Playlist:'
+  options:
+    - Daily Mix 1
+    - Daily Mix 2
+    - Daily Mix 3
+    - Daily Mix 4
+    - Daily Mix 5
+    - Daily Mix 6
+    - Discover
+    - New Releases
+    - Headphone Commute 2019
+    - Headphone Commute
+    - Four Tet
+  icon: mdi:spotify
+
+radio_playlist:
+  name: 'Radio:'
+  options:
+    - Radio 6
+    - Radio NTS1
+    - Radio NTS2
+    - Radio 1
+    - Radio 2

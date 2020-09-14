@@ -1,0 +1,118 @@
+#### automations/lights_hallup.yaml #########################################
+
+- alias: 'Hall Lights On Movement'
+  trigger:
+    - platform: state
+      entity_id: group.presence_motion_hallup
+      to: 'on'    
+  action:
+    service: script.turn_on 
+    data_template: 
+      entity_id: script.hall_{{ states('input_select.hall_lights_mode') }}
+
+- alias: 'Hall Lights Off Timer'
+  trigger:
+    platform: state
+    # entity_id: binary_sensor.0x00158d0001daf449_occupancy
+    entity_id: group.presence_motion_hallup
+    to: 'off'
+    for:
+      minutes: 1
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: input_select.hall_lights_mode
+        state: 'Normal'
+      - condition: state
+        entity_id: input_select.hall_lights_mode
+        state: 'Dim'
+  action:
+    service: light.turn_off
+    #entity_id: light.0x90fd9ffffe0f6649_light, light.0xd0cf5efffe426737_light
+    entity_id: light.hall_up_lights
+
+## Light Modes
+
+- alias: 'Hallway Lights Button Single'
+  trigger:
+    platform: state
+    entity_id: sensor.0x00158d00026b7686_click
+    to: 'single'   
+  #   platform: mqtt 
+  #   topic: 'zigbee2mqtt/0x00158d00026b7686' 
+  # condition: 
+  #   condition: template 
+  #   value_template: '{{ "single" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: input_select.hall_lights_mode
+        option: >
+          {% if is_state('input_select.hall_lights_mode' , 'Normal') %} 
+            Dim
+          {% else %} 
+            Normal
+          {% endif %}
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.hall_{{ states('input_select.hall_lights_mode') }}
+
+- alias: 'Hallway Lights Button Double'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d00026b7686_click
+    to: 'double'   
+  #   platform: mqtt 
+  #   topic: 'zigbee2mqtt/0x00158d00026b7686' 
+  # condition: 
+  #   condition: template 
+  #   value_template: '{{ "double" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.hall_lights_mode
+        option: 'Bright'
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.hall_{{ states('input_select.hall_lights_mode') }}
+
+- alias: 'Hallway Lights Button Long'
+  trigger: 
+    platform: state
+    entity_id: sensor.0x00158d00026b7686_click
+    to: 'long'   
+  #   platform: mqtt 
+  #   topic: 'zigbee2mqtt/0x00158d00026b7686' 
+  # condition: 
+  #   condition: template 
+  #   value_template: '{{ "long" == trigger.payload_json.click }}'  
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.hall_lights_mode
+        option: 'Normal'
+    - service: script.turn_on 
+      data_template: 
+        entity_id: script.hall_{{ states('input_select.hall_lights_mode') }}
+
+# set dim at night
+- alias: 'Hall lights dim time'
+  trigger:
+    platform: time
+    at: '18:30:00'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.hall_lights_mode
+        option: 'Dim'
+        
+- alias: 'Hall lights normal time'
+  trigger:
+    platform: time
+    at: '07:00:00'
+  action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.hall_lights_mode
+        option: 'Normal'        

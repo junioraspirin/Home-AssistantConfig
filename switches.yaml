@@ -1,0 +1,98 @@
+##### switches.yaml ####
+
+#### RF Switches
+# Wilko III-1
+- platform: mqtt
+  name: "backbedroomstereo"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#511557"
+  payload_off: "#511554"
+  #optimistic: true
+
+#Wilko III-2
+- platform: mqtt
+  name: "livingroom_lamp_big"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#514555"
+  payload_off: "#514554"
+  #optimistic: true
+
+#Wilko III-3
+- platform: mqtt
+  name: "Bedroom_rclamp2"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#515153"
+  payload_off: "#51515C"
+  #optimistic: true
+
+#Wilko III-4
+- platform: mqtt
+  name: "diningroom_stereo"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#515455"
+  payload_off: "#515454"
+  #optimistic: true  
+
+#Brennenstuhl 12345-A
+- platform: mqtt
+  name: "outside fairy lights"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#000551"
+  payload_off: "#000554"
+  #optimistic: true
+
+#Brennenstuhl 12345-B
+- platform: mqtt
+  name: "backbedroomshelflamp"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#001151"
+  payload_off: "#001154"
+  #optimistic: true
+
+#Brennenstuhl 12345-C
+- platform: mqtt
+  name: "backbedroombabymon"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#001451"
+  payload_off: "#001454"
+  #optimistic: true
+
+#Brennenstuhl 12345-D
+- platform: mqtt
+  name: "backbedroomlamp"
+  command_topic: "cmnd/RFBridge/rfcode"
+  availability_topic: "tele/RFBridge/LWT"
+  payload_available: "Online"
+  payload_not_available: "Offline"
+  payload_on: "#001511"
+  payload_off: "#001514"
+  #optimistic: true
+
+## others: cmnd/RFBridge/Backlog RfRaw AAB0210314016703F924180101011001100110010101100110011001010110010101100255; RfRaw 0
+## rfraw 166 mode to sniff
+## convert B1 to B0 code: http://bbconv.hrbl.pl/
+
+## RF Bridge http://192.168.0.125/
+
+

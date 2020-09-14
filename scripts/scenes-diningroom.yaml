@@ -1,0 +1,111 @@
+#### scripts/scenes-diningroom.yaml #########################################
+
+dining_normal:
+  sequence:
+    - condition: or
+      conditions:
+        # - condition: sun
+        #   after: sunset
+        #   after_offset: '-01:30:00'
+        # - condition: sun
+        #   before: sunrise
+        #   before_offset: '01:30:00'
+        - condition: numeric_state
+          entity_id: sensor.0x04cf8cdf3c772bb2_illuminance_lux
+          below: 350
+        - condition: state
+          entity_id: group.presence_motion_diningroom
+          state: 'on'
+        # - condition: state
+        #   entity_id: binary_sensor.0x00158d0001dc126e_occupancy
+        #   state: 'on'
+        # - condition: numeric_state
+        #   entity_id: 'sensor.dark_sky_cloud_coverage'
+        #   above: '15'        
+    - service: script.dining_normal_instant
+
+dining_normal_instant:
+  sequence:          
+    - service: light.turn_on
+      data:
+        entity_id: light.0xd0cf5efffe7d4154_light
+        brightness: 150
+    - service: light.turn_on
+      data:
+        entity_id: light.diningroom_noncore_lights
+        brightness: 10    
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.0x90fd9ffffe149e19_light
+    #     brightness: 10
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.0xd0cf5efffeda13f0_light
+    #     brightness: 10
+    - service: light.turn_on
+      data:
+        entity_id: light.wled_diningroom_fire
+    - service: switch.turn_on
+      entity_id: switch.sonoff_4, switch.sonoff_5
+    - service: switch.turn_off
+      entity_id: switch.diningroomlamp
+
+dining_bright:
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.diningroom_lights
+        brightness: 255
+    #     entity_id: light.0xd0cf5efffe7d4154_light
+    #     brightness: 255
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.0x90fd9ffffe149e19_light
+    #     brightness: 255
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.0xd0cf5efffeda13f0_light
+    #     brightness: 255
+    - service: light.turn_on
+      data:
+        entity_id: light.wled_diningroom_fire    
+    - service: switch.turn_on
+      entity_id: switch.sonoff_4, switch.sonoff_5, switch.diningroomlamp  
+
+dining_cosy:
+  sequence:
+    - service: light.turn_off
+      data:
+        entity_id: light.0xd0cf5efffe7d4154_light, light.0xd0cf5efffeda13f0_light, light.0x90fd9ffffe149e19_light
+    - service: light.turn_on
+      data:
+        entity_id: light.wled_diningroom_fire
+    - service: switch.turn_on
+      entity_id: switch.sonoff_4, switch.sonoff_5  
+    - service: switch.turn_off
+      entity_id: switch.diningroomlamp
+
+  # sequence:
+  #   - service: light.turn_off
+  #     data:
+  #       entity_id: light.0xd0cf5efffe7d4154_light, light.0xd0cf5efffeda13f0_light
+  #       # brightness: 0
+  #   - service: light.turn_on
+  #     data:
+  #       entity_id: light.0x90fd9ffffe149e19_light
+  #       brightness: 40
+  #   # - service: light.turn_on
+  #   #   data:
+  #   #     entity_id: light.0xd0cf5efffeda13f0_light
+  #   #     brightness: 0
+  #   - service: switch.turn_on
+  #     entity_id: switch.sonoff_5  
+  #   - service: switch.turn_off
+  #     entity_id: switch.diningroomlamp, switch.sonoff_4
+
+dining_off:
+  sequence:
+    - service: switch.turn_off
+      entity_id: switch.diningroomlamp, switch.sonoff_4, switch.sonoff_5
+    - service: light.turn_off
+      entity_id: light.diningroom_lights

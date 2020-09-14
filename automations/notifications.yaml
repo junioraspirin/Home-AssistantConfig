@@ -1,0 +1,125 @@
+#### automations/notifications.yaml #########################################
+
+
+- alias: "Notify on HASS Start"
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data:
+        title: "⚠️ Hassio Alert ⚠️"
+        message: "Home Assistant Restarted"
+        data:
+          ttl: 0
+          priority: high
+          data:
+            tag: sysrestart
+            channel: alert
+
+- alias: "Notify on System Issue"
+  trigger:
+    - entity_id: sensor.disk_use_percent
+      platform: numeric_state
+      above: 75
+    - entity_id:  sensor.processor_use
+      platform: numeric_state
+      above: 85
+      for:
+        seconds: 60
+    - entity_id: sensor.memory_use_percent
+      platform: numeric_state
+      above: 75
+    - entity_id:  sensor.processor_use
+      platform: numeric_state
+      above: 85
+      for:
+        seconds: 60
+  action:
+    service: notify.mobile_app_moto_g5_plus_xt1684
+    data_template:
+      title: "⚠️ Hassio Alert ⚠️"
+      message: "DSK:{{ states('sensor.disk_use_percent') | float}}% | CPU:{{ states('sensor.processor_use') | float}}% | MEM:{{ states('sensor.memory_use_percent') | float}}%"
+      data:
+        ttl: 0
+        priority: high
+        data:
+          tag: syspi
+          channel: alert
+  
+- alias: "Notify on Low Battery"
+  trigger:
+    platform: time
+    at: '09:00:00'
+  condition:
+    condition: and
+    conditions:   
+      - condition: time
+        weekday:
+          - mon
+      - condition: numeric_state
+        entity_id: sensor.min_battery_level
+        below: 15
+  action:
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data:
+        title: "⚠️ Hassio Alert ⚠️"
+        message: '🔋 below 15%!' 
+        data:
+          ttl: 0
+          priority: high
+          data:
+            tag: sysbat
+            channel: alert
+      
+- alias: "Notify on HA Update Avaliable"
+  trigger:
+    - entity_id: binary_sensor.updater
+      platform: state
+      to: "on"
+  action:
+    - service: notify.mobile_app_moto_g5_plus_xt1684
+      data_template:
+        title: "⚠️ Hassio Alert ⚠️"
+        message: "New Version: {{ states_attr('binary_sensor.updater', 'newest_version') }}"
+        data:
+          clickAction: "https://github.com/home-assistant/core/releases/tag/{{ states_attr('binary_sensor.updater', 'newest_version') }}" # action when clicking main notification
+          data:
+            channel: alert
+
+# - alias: "Notify morning week weather"
+#   trigger:
+#     platform: time
+#     at: '06:45:00'
+#   condition:
+#     - condition: time
+#       weekday:
+#         - mon
+#         - tue
+#         - wed
+#         - thu
+#         - fri
+#   action:
+#     - service: notify.telegrambot   
+#       data_template:
+#         message: >
+#           The weather to day will be {{states.sensor.dark_sky_summary_0d.state}} with a high of {{states.sensor.dark_sky_daytime_high_temperature_0d.state | round(0)}} and a low of {{states.sensor.dark_sky_overnight_low_temperature_0d.state | round(0)}}. The likely hood of rain is {{states.sensor.dark_sky_precip_probability_0d.state | round(0)}}%.
+#           It is currently {{states.sensor.dark_sky_temperature.state | round(0)}} degrees and {{states.sensor.dark_sky_summary.state}}.
+
+# - alias: "Notify morning weekend weather"
+#   trigger:
+#     platform: time
+#     at: '09:00:00'
+#   condition:
+#     - condition: time
+#       weekday:
+#         - sat
+#         - sun
+#   action:
+#     - service: notify.telegrambot   
+#       data_template:
+#         message: >
+#           The weather to day will be {{states.sensor.dark_sky_summary_0d.state}} with a high of {{states.sensor.dark_sky_daytime_high_temperature_0d.state | round(0)}} and a low of {{states.sensor.dark_sky_overnight_low_temperature_0d.state | round(0)}}. The likely hood of rain is {{states.sensor.dark_sky_precip_probability_0d.state | round(0)}}%.
+#           It is currently {{states.sensor.dark_sky_temperature.state | round(0)}} degrees and {{states.sensor.dark_sky_summary.state}}.
+
+        

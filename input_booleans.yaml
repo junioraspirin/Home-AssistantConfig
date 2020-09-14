@@ -1,0 +1,29 @@
+### input_booleans.yaml
+
+washing_machine_power:
+  name: Washing Machine Switch
+  initial: on
+  icon: mdi:power
+
+zigbee_permit_join:
+  name: Allow devices to join
+  initial: off
+  icon: mdi:cellphone-wireless
+  
+stereo_diningroom_trigger:
+  name: Stereo dining room trigger
+  initial: off
+  icon: mdi:power
+  
+lights_bedroom_trigger:
+  name: lights bed room trigger
+  initial: on
+  icon: mdi:power
+  
+pc_playing_prev:
+  name: PC playing before call
+  initial: off
+
+doorbell:
+  name: doorbell triggered
+  initial: off

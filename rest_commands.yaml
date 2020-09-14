@@ -1,0 +1,11 @@
+### rest_commands.yaml
+
+autoremote_notification:
+  url:  'https://autoremotejoaomgcd.appspot.com/sendmessage?key={{ key }}&message={{ message }}'
+
+google_backup:
+  url: 'http://192.168.0.12:8055/gb/doBackup'
+  timeout: '300'
+
+# google_broadcast:
+#   url: 'http://192.168.0.12:5000/broadcast_message?message={{ message }}'

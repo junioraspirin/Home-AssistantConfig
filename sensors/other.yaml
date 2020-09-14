@@ -1,0 +1,146 @@
+### sensors.yaml ########################################
+
+### weather
+- platform: yr
+
+- platform: darksky
+  api_key: !secret darksky_api_key
+  forecast:
+    - 0
+    - 1
+    # - 2
+    # - 3
+    # - 4
+    # - 5
+    # - 6
+    # - 7
+  hourly_forecast:
+    - 7
+    - 13
+    - 18
+  monitored_conditions:
+    - summary
+    - apparent_temperature
+    - temperature_high
+    - temperature_low
+    - temperature
+    - humidity
+    - precip_probability
+    - daily_summary
+    - cloud_cover
+    - precip_type
+    - dew_point
+    - wind_speed
+    - alerts
+
+    
+- platform: season
+
+#- platform: uk_transport
+#  app_id: !secret uk_transport_app_id
+#  app_key: !secret uk_transport_app_key
+#  #scan_interval: 15  
+#  queries:
+#    - mode: train
+#      origin: BRV
+#      destination: BHM
+
+- platform: min_max
+  type: min
+  name: min battery level
+  entity_ids:
+    - sensor.0x00158d0001a8fae9_battery 
+    - sensor.0x00158d0001ad43b9_battery 
+    - sensor.0x00158d0001daf449_battery 
+    - sensor.0x00158d0001daf479_battery 
+    - sensor.0x00158d0001dc126e_battery 
+    - sensor.0x00158d00027a1fb7_battery 
+    - sensor.0x00158d00028aaf7c_battery  
+    - sensor.0x00158d000227b177_battery 
+    - sensor.0x00158d0002c8bace_battery 
+    - sensor.0x00158d0002c8bafb_battery 
+    - sensor.0x00158d0001c2d471_battery 
+    - sensor.0x00158d0002009be1_battery 
+    - sensor.0x00158d000209118e_battery
+    - sensor.0x00158d000183dea8_battery
+    - sensor.0x00158d0001b7157d_battery 
+    - sensor.0x00158d00026b7686_battery 
+    - sensor.0x00158d00026b76d5_battery
+    - sensor.0x00158d0002b2fc26_battery
+    - sensor.0x00158d0002c720c3_battery
+    - sensor.0x00158d0002c8c5a4_battery
+    - sensor.0x00158d000200d63a_battery
+    - sensor.0x00158d0002e2c145_battery
+    - sensor.0x00158d00027a4168_battery
+
+- platform: min_max
+  type: min
+  name: min link level zigbee
+  entity_ids:
+    - sensor.0x00158d0001a8fae9_linkquality 
+    - sensor.0x00158d0001ad43b9_linkquality 
+    - sensor.0x00158d0001daf449_linkquality 
+    - sensor.0x00158d0001daf479_linkquality 
+    - sensor.0x00158d0001dc126e_linkquality 
+    - sensor.0x00158d00027a1fb7_linkquality 
+    - sensor.0x00158d00028aaf7c_linkquality  
+    - sensor.0x00158d000227b177_linkquality 
+    - sensor.0x00158d0002c8bace_linkquality 
+    - sensor.0x00158d0002c8bafb_linkquality 
+    - sensor.0x00158d0001c2d471_linkquality 
+    - sensor.0x00158d0002009be1_linkquality 
+    - sensor.0x00158d000209118e_linkquality
+    - sensor.0x00158d000183dea8_linkquality
+    - sensor.0x00158d0001b7157d_linkquality 
+    - sensor.0x00158d00026b7686_linkquality 
+    - sensor.0x00158d00026b76d5_linkquality
+    - sensor.0x00158d0002b2fc26_linkquality
+    - sensor.0x00158d0002c720c3_linkquality
+    - sensor.0x00158d0002c8c5a4_linkquality
+    - sensor.0x00158d000200d63a_linkquality
+    - sensor.0x90fd9ffffe0f6649_linkquality
+    - sensor.0xd0cf5efffe426737_linkquality
+    - sensor.0xd0cf5efffe7d4154_linkquality
+    - sensor.0x90fd9ffffe149e19_linkquality
+    - sensor.0xd0cf5efffeda13f0_linkquality
+    - sensor.0x00158d00022b4476_linkquality
+    - sensor.0x00158d00025eace3_linkquality
+    - sensor.0x00158d0002e2c145_linkquality
+    - sensor.0x00158d00027a4168_linkquality
+    - sensor.0x00158d0002ec13ce_linkquality
+
+- platform: min_max
+  type: min
+  name: min link level sonoff
+  entity_ids:
+    - sensor.diningroomlamp_status
+    - sensor.bathroomfan_status
+    - sensor.washingmachine_status
+    - sensor.bedroompl_status
+    - sensor.bedroom_fairy_status
+    - sensor.sonoff_status_3
+    - sensor.sonoff_status_2
+    - sensor.sonoff_status    
+    
+### pi system monitor
+- platform: systemmonitor
+  resources:
+  - type: disk_use_percent
+    arg: /
+  - type: memory_use_percent
+  - type: processor_use
+  - type: last_boot
+  - type: swap_use_percent
+
+# washing mashine power  
+- platform: statistics
+  name: 'Washer Average Watts'
+  entity_id: sensor.washing_energy_power
+  sampling_size: 6
+
+- platform: statistics
+  name: 'Bathroom Humidity Stats'
+  entity_id: sensor.0x00158d000227b177_humidity
+  sampling_size: 4
+
+# - platform: spotcast

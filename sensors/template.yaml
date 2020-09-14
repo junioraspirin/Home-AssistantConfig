@@ -1,0 +1,215 @@
+### sensors/template.yaml ########################################
+
+- platform: template
+  sensors:
+    sixmusicartistpy:
+      value_template: ""
+    sixmusictitlepy:
+      value_template: ""
+      
+    media_bedroom_track:
+      friendly_name: Media Bedroom Track
+      value_template:  >-
+        {% if is_state_attr('media_player.bedroom', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}
+
+        {% elif is_state_attr('media_player.bedroom', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}   
+
+        {% elif is_state_attr('media_player.bedroom', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusictitlepy') }}     
+
+        {% elif state_attr('media_player.bedroom', 'media_title') != None %}        
+          {{ state_attr('media_player.bedroom', 'media_title') }}
+
+        {% else %}
+          {{ state_attr('media_player.bedroom', 'app_id') }}
+        {% endif %}
+
+    media_bedroom_artist:
+      friendly_name: Media Bedroom Artist
+      value_template:  >-
+        {% if is_state_attr('media_player.bedroom', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.bedroom', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.bedroom', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusicartistpy') }}   
+
+        {% else %}
+          {{ state_attr('media_player.bedroom', 'media_artist') }}
+        {% endif %}
+        
+    media_bedroomvol:
+      friendly_name: Media Bedroom Volume
+      value_template: "{{ state_attr('media_player.bedroom', 'volume_level') }}"
+
+
+    media_bedroom_back_track:
+      friendly_name: Media Back Bedroom Track
+      value_template:  >-
+        {% if is_state_attr('media_player.back_bedroom', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }} 
+
+        {% elif is_state_attr('media_player.back_bedroom', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}
+
+        {% elif is_state_attr('media_player.back_bedroom', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusictitlepy') }}
+
+        {% elif state_attr('media_player.back_bedroom', 'media_title') != None %}        
+          {{ state_attr('media_player.back_bedroom', 'media_title') }}
+
+        {% else %}
+          {{ state_attr('media_player.back_bedroom', 'app_id') }}
+        {% endif %}
+
+    media_bedroom_back_artist:
+      friendly_name: Media Back Bedroom Artist
+      value_template:  >-
+        {% if is_state_attr('media_player.back_bedroom', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.back_bedroom', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.back_bedroom', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusicartistpy') }}            
+
+        {% else %}
+          {{ state_attr('media_player.back_bedroom', 'media_artist') }}
+        {% endif %}
+
+    media_bedroombackvol:
+      friendly_name: Media Back Bedroom Volume
+      value_template: "{{ state_attr('media_player.back_bedroom', 'volume_level') }}"
+
+
+    media_dining_room_track:
+      friendly_name: Media Dining Room Track
+      value_template:  >-
+        {% if is_state_attr('media_player.dining_room', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}  
+
+        {% elif is_state_attr('media_player.dining_room', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}   
+
+        {% elif is_state_attr('media_player.dining_room', 'app_name', 'Default Media Receiver') and is_state('input_select.radio_playlist', 'Radio 6') %}
+          {{ states('sensor.sixmusictitlepy') }}        
+
+        {% elif is_state_attr('media_player.dining_room', 'app_name', 'Default Media Receiver') %}
+          {{ states('input_select.radio_playlist') }}
+
+        {% elif state_attr('media_player.dining_room', 'media_title') != None %}        
+          {{ state_attr('media_player.dining_room', 'media_title') }}
+
+        {% else %}
+          {{ state_attr('media_player.dining_room', 'app_id') }}
+        {% endif %}
+
+    media_dining_room_artist:
+      friendly_name: Media Dining Room Artist
+      value_template:  >-
+        {% if is_state_attr('media_player.dining_room', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }} 
+
+        {% elif is_state_attr('media_player.dining_room', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.dining_room', 'app_name', 'Default Media Receiver') and is_state('input_select.radio_playlist', 'Radio 6') %}
+          {{ states('sensor.sixmusicartistpy') }}         
+
+        {% else %}
+          {{ state_attr('media_player.dining_room', 'media_artist') }}
+        {% endif %}
+
+    media_dining_roomvol:
+      friendly_name: Media Dining Room Volume
+      value_template: "{{ state_attr('media_player.dining_room', 'volume_level') }}"
+
+
+    media_tv_track:
+      friendly_name: Media TV Track
+      value_template:  >-
+        {% if is_state_attr('media_player.tv', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}  
+
+        {% elif is_state_attr('media_player.tv', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusictitlepy') }}  
+
+        {% elif is_state_attr('media_player.tv', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusictitlepy') }}  
+
+        {% elif state_attr('media_player.tv', 'media_title') != None %}        
+          {{ state_attr('media_player.tv', 'media_title') }}
+
+        {% else %}
+          {{ state_attr('media_player.tv', 'app_id') }}
+        {% endif %}
+
+    media_tv_artist:
+      friendly_name: Media TV Artist
+      value_template:  >-
+        {% if is_state_attr('media_player.tv', 'media_title', 'Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.tv', 'media_title', 'BBC Radio 6 Music') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% elif is_state_attr('media_player.tv', 'app_name', 'Default Media Receiver') %}
+          {{ states('sensor.sixmusicartistpy') }}  
+
+        {% else %}
+          {{ state_attr('media_player.tv', 'media_artist') }}
+        {% endif %}
+
+    media_tvvol:
+      friendly_name: Media TV Volume
+      value_template: "{{ state_attr('media_player.tv', 'volume_level') }}"
+
+
+    washing_machine_status:
+      entity_id:
+        - input_select.washer_status
+      value_template: "{{ states('input_select.washer_status') }}"
+      friendly_name: 'Washing Machine Status'
+      icon_template: mdi:washing-machine
+    
+    distance_apart:
+      value_template: "{{ distance('device_tracker.paul_motog5_2', 'device_tracker.rachel_motog5') | round(2)}}"
+      friendly_name: Distance Apart
+      unit_of_measurement: 'km'
+
+
+    # kettle_amps:
+    #   friendly_name_template: "{{ states.switch.kettle.name}} Current"
+    #   value_template: '{{ states.switch.kettle.attributes["current_a"] | float }}'
+    #   unit_of_measurement: 'A'
+    # kettle_watts:
+    #   friendly_name_template: "{{ states.switch.kettle.name}} Current Consumption"
+    #   value_template: '{{ states.switch.kettle.attributes["current_power_w"] | float }}'
+    #   unit_of_measurement: 'W'
+    # kettle_total_kwh:
+    #   friendly_name_template: "{{ states.switch.kettle.name}} Total Consumption"
+    #   value_template: '{{ states.switch.kettle.attributes["total_energy_kwh"] | float }}'
+    #   unit_of_measurement: 'kWh'
+    # kettle_volts:
+    #   friendly_name_template: "{{ states.switch.kettle.name}} Voltage"
+    #   value_template: '{{ states.switch.kettle.attributes["voltage"] | float }}'
+    #   unit_of_measurement: 'V'
+    # kettle_today_kwh:
+    #   friendly_name_template: "{{ states.switch.kettle.name}} Today's Consumption"
+    #   value_template: '{{ states.switch.kettle.attributes["today_energy_kwh"] | float }}'
+    #   unit_of_measurement: 'kWh'
+      
+    ping_internet:
+      friendly_name_template: "Ping Speed Router"
+      value_template: "{{ state_attr('binary_sensor.router_ping', 'round_trip_time_avg') | float }}"
+      unit_of_measurement: 'ms'
+
+    bathroom_humidity_change:
+      friendly_name_template: "Bathroom Humidity Change"
+      value_template: "{{ state_attr('sensor.bathroom_humidity_stats', 'change') }}"
+      unit_of_measurement: '%'      
